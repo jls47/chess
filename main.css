@@ -15,10 +15,6 @@
     margin-top: 1%;
 }
 
-.board div:nth-child(even){
-    background: black;
-}
-
 @media only screen and (max-width: 700px) {
     .board{
         width: 80vw;
