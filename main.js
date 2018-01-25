@@ -1,47 +1,55 @@
-function Bishop(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
+var math = require('mathjs')
+
+
+function Bishop(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = math.matrix(newspot.split(","));
+    var move = math.subtract(coords, newspot);
+
+    for(var i = 0; i <= 1; i++){
+        coords[i] = Math.abs(coords[i])
+    }
+
+}
+
+Bishop('3,4', '2,3')
+
+function King(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = newspot.split(",");
+    this.newspotset = function(){
         console.log('butkus')
     };
 
 }
-function King(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
+function Knight(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = newspot.split(",");
+    this.newspotset = function(){
         console.log('butkus')
     };
 
 }
-function Knight(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
+function Pawn(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = newspot.split(",");
+    this.newspotset = function(){
         console.log('butkus')
     };
 
 }
-function Pawn(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
+function Queen(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = newspot.split(",");
+    this.newspotset = function(){
         console.log('butkus')
     };
 
 }
-function Queen(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
-        console.log('butkus')
-    };
-
-}
-function Rook(coords, move){
-    this.coords = coords;
-    this.move = move;
-    this.moveset = function(){
+function Rook(coords, newspot){
+    this.coords = coords.split(",");
+    this.newspot = newspot.split(",");
+    this.newspotset = function(){
         console.log('butkus')
     };
 
