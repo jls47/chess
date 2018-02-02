@@ -53,6 +53,7 @@ function Pawn(coords, newspot){
         console.log("move seems legit")
     }
 }
+
 Pawn('34','35');
 
 function Queen(coords, newspot){
@@ -74,4 +75,5 @@ function Rook(coords, newspot){
         console.log("move seems legit");
     }
 }
+
 Rook('34', '74');
