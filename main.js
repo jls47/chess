@@ -8,11 +8,16 @@ var matrixsub = function(first, last){
     return move;
 }
 $(document).ready(function(){
+
+
+
+    //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
         
     function Bishop(spot){
         console.log(spot);
         //TO DO: Establish the ability to place a bishop somewhere on the board
         $('#'+spot).css('background','black');
+        $('#'+spot).attr('piece','bishop');
     }
 
     Bishop.prototype.move = function(coords, newspot){
@@ -21,12 +26,14 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if(move[0] = move[1]){
             console.log("move seems legitB");
-            console.log(move);
+            $('#'+newspot).css('background','black');
         }
     }
 
     var B1B = new Bishop('13');
     var B2B = new Bishop('16');
+
+
 
     B1B.move('34', '23');
 
