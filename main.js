@@ -38,9 +38,10 @@ $(document).ready(function(){
 
     B1B.move('34', '23');
 
-    function King(spot){
+    function King(spot, color){
         console.log(spot);
-        $('#'+spot).css('background','grey');
+        this.color = color;
+        $('#'+spot).css('background', this.color);
     }
 
     King.prototype.move = function(coords, newspot){
@@ -49,16 +50,18 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
             console.log("move seems legit King");
+            $('#'+newspot).css('background',this.color);
         }
     }
 
-    var KB = new King('14');
+    var KB = new King('14', 'black');
 
     KB.move('34', '33');
 
-    function Knight(spot){
+    function Knight(spot, color){
         console.log(spot);
-        $('#'+spot).css('background','darkblue');
+        this.color = color;
+        $('#'+spot).css('background',this.color);
     }
 
     Knight.prototype.move = function(coords, newspot){
@@ -67,15 +70,17 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if((move[0] == 1 && move[1] == 4) || (move[0] == 4 && move[1] == 1)){
             console.log('move seems legit knight')
+            $('#'+newspot).css('background',this.color);
         }
     }
 
-    var KnB1 = new Knight('12');
-    var KnB2 = new Knight('17');
+    var KnB1 = new Knight('12', 'red');
+    var KnB2 = new Knight('17', 'red');
 
-    function Pawn(spot){
+    function Pawn(spot, color){
         console.log(spot);
-        $('#'+spot).css('background','blue');
+        this.color = color;
+        $('#'+spot).css('background',this.color);
     }
 
     Pawn.prototype.move = function(coords, newspot){
@@ -83,26 +88,29 @@ $(document).ready(function(){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 && move[1] == 1){
-            
+            console.log('move seems legit pawn');
+            $('#'.newspot).css('background',this.color);
         }else if(((move[0] == 0 && move[1] == 2) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
-            
+            $('#'.newspot).css('background',this.color);
+            console.log('move seems legit pawn');
         }
     }
 
-    var PB1 = new Pawn('21');
-    var PB2 = new Pawn('22');
-    var PB3 = new Pawn('23');
-    var PB4 = new Pawn('24');
-    var PB5 = new Pawn('25');
-    var PB6 = new Pawn('26');
-    var PB7 = new Pawn('27');
-    var PB8 = new Pawn('28');
+    var PB1 = new Pawn('21','darkgrey');
+    var PB2 = new Pawn('22','darkgrey');
+    var PB3 = new Pawn('23','darkgrey');
+    var PB4 = new Pawn('24','darkgrey');
+    var PB5 = new Pawn('25','darkgrey');
+    var PB6 = new Pawn('26','darkgrey');
+    var PB7 = new Pawn('27','darkgrey');
+    var PB8 = new Pawn('28','darkgrey');
 
     PB1.move('21', '23');
 
-    function Queen(spot){
+    function Queen(spot, color){
         console.log(spot);
-        $('#'+spot).css('background','lightgrey');
+        this.color = color;
+        $('#'+spot).css('background',this.color);
     }
     
     Queen.prototype.move = function(coords, newspot){
@@ -111,15 +119,17 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
             console.log('move seems legit queen');
+            $('#'.newspot).css('background',this.color);
         }
     }
-    var QB = new Queen('15');
+    var QB = new Queen('15','green');
 
     QB.move('34','38');
 
-    function Rook(spot){
+    function Rook(spot, color){
         console.log(spot);
-        $('#'+spot).css('background','lightblue');
+        this.color = color;
+        $('#'+spot).css('background',this.color);
     }
 
     Rook.prototype.move = function(coords, newspot){
@@ -128,11 +138,12 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 || move[1] == 0){
             console.log('move seems legit rook');
+            $('#'.newspot).css('background',this.color);
         };
     }
 
-    var RB1 = new Rook('11');
-    var RB2 = new Rook('18');
+    var RB1 = new Rook('11','lightblue');
+    var RB2 = new Rook('18','lightblue');
 
     RB1.move('34', '74');
 
