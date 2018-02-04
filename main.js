@@ -13,10 +13,11 @@ $(document).ready(function(){
 
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
         
-    function Bishop(spot){
+    function Bishop(spot, color){
         console.log(spot);
+        this.color = color;
         //TO DO: Establish the ability to place a bishop somewhere on the board
-        $('#'+spot).css('background','black');
+        $('#'+spot).css('background',this.color);
         $('#'+spot).attr('piece','bishop');
     }
 
@@ -26,12 +27,12 @@ $(document).ready(function(){
         var move = matrixsub(coords, newspot);
         if(move[0] = move[1]){
             console.log("move seems legitB");
-            $('#'+newspot).css('background','black');
+            $('#'+newspot).css('background',this.color);
         }
     }
 
-    var B1B = new Bishop('13');
-    var B2B = new Bishop('16');
+    var B1B = new Bishop('13', 'blue');
+    var B2B = new Bishop('16', 'black');
 
 
 
