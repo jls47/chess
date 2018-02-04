@@ -68,7 +68,7 @@ $(document).ready(function(){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
-        if((move[0] == 1 && move[1] == 4) || (move[0] == 4 && move[1] == 1)){
+        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
             console.log('move seems legit knight')
             $('#'+newspot).css('background',this.color);
         }
@@ -76,6 +76,8 @@ $(document).ready(function(){
 
     var KnB1 = new Knight('12', 'red');
     var KnB2 = new Knight('17', 'red');
+
+    KnB1.move('12','31')
 
     function Pawn(spot, color){
         console.log(spot);
