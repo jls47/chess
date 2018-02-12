@@ -8,10 +8,27 @@ var matrixsub = function(first, last){
     return move;
 }
 $(document).ready(function(){
-
-
-
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
+
+    //TO DO: MAKE SPACE COLORS ALTERNATE
+    var i = 0;
+    var c1 = 'white';
+    var c2 = 'lightblue';
+    var tmp = '';
+    $('.board').children().each(function(){
+        this.id = $(this).attr('id');
+        i++;
+        if(i % 2 == 0){
+            $('#'+this.id).css('background',c2);
+        }else{
+            $('#'+this.id).css('background',c1);
+        }
+        if(i % 8 == 0){
+            tmp = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+    })
         
     function Bishop(spot, color){
         console.log(spot);
@@ -19,6 +36,7 @@ $(document).ready(function(){
         //TO DO: Establish the ability to place a bishop somewhere on the board
         $('#'+spot).css('background',this.color);
         $('#'+spot).attr('piece','bishop');
+        
     }
 
     Bishop.prototype.move = function(coords, newspot){
@@ -148,6 +166,45 @@ $(document).ready(function(){
     var RB2 = new Rook('18','lightblue');
 
     RB1.move('34', '74');
+
+
+    
+
+    //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
+    //FIRST: I must recognize when a piece has been clicked and trigger
+    //a state of clicked-ness
+    //SECOND: When this piece has been clicked, I need to show users
+    //where they can possibly go
+    //THIRD: I need to be ready for the next click
+    //FOURTH: Upon the next click, I need to see if its either open space
+    //or occupied
+    //Fifth: If occupied by friendly, I must switch the piece.  If occupied
+    //by foe, I must remove that piece and place it in the bin.
+    //Sixth: I must update the css to display changes.
+
+    var possmoves = function(piece, origin){
+        
+    }
+
+    var startmove = function(piece, origin){
+
+    }
+
+    var endmove = function(piece, dest){
+
+    }
+
+    
+
+    $('.board').children().click(function(){
+        if(grabbed == false)
+            if(this.attr('piece') == 'none'){
+                alert('clicked an empty space!');
+            }else{
+
+            }
+
+    })
 
 
 })
