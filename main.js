@@ -12,6 +12,189 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     var B1B, B2B, KB, KnB1, KnB2, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, QB, RB1, RB2;
     var B1W, B2W, KW, KnW1, KnW2, PW1, PW2, PW3, PW4, PW5, PW6, PW7, PW8, QW, RW1, RW2;
+    
+
+    //TO DO: MAKE SPACE COLORS ALTERNATE
+    var i = 0;
+    var c1 = 'white';
+    var c2 = 'lightblue';
+    var tmp = '';
+    var board = document.getElementsByClassName("board");
+    for(var i = 0; i < board[0].children.length; i++){
+        var id = board[0].children[i].id;
+        if(i % 2 == 0){
+            document.getElementById(id).style.background = c2;
+        }else{
+            document.getElementById(id).style.background = c1;
+        }
+        if(i >= 1 && (i+1) % 8 == 0){
+            tmp = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+    }
+
+    function placement(piecename, spot){
+        this.name = piecename;
+        this.spot = spot;
+        this.src = './assets/' + this.name + '.png';
+        document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
+    }
+
+    function despawn(spot){
+        this.spot = spot;
+        document.getElementById(this.spot).innerHTML = '';
+    }
+        
+    function Bishop(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'bbishop';
+        }else{
+            this.piecename = "wbishop";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+
+    Bishop.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if(move[0] = move[1]){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }
+    }
+
+    function King(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'bking';
+        }else{
+            this.piecename = "wking";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+
+    King.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }
+    }
+
+
+
+
+    function Knight(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'bknight';
+        }else{
+            this.piecename = "wknight";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+
+    Knight.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }
+    }
+
+
+
+    function Pawn(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'bpawn';
+        }else{
+            this.piecename = "wpawn";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+
+    Pawn.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if(move[0] == 0 && move[1] == 1){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }else if(((move[0] == 0 && move[1] == 2) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }
+    }
+
+
+
+
+    function Queen(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'bqueen';
+        }else{
+            this.piecename = "wqueen";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+    
+    Queen.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        }
+    }
+
+    function Rook(spot, color){
+        this.color = color;
+        this.spot = spot;
+        
+        if(this.color == 'black'){
+            this.piecename = 'brook';
+        }else{
+            this.piecename = "wrook";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
+    }
+
+    Rook.prototype.move = function(coords, newspot){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = matrixsub(coords, newspot);
+        if(move[0] == 0 || move[1] == 0){
+            placement(this.piecename, newspot);
+            despawn(coords);
+        };
+    }
+
     function start(){
         B1B = new Bishop('13', 'black');
         B2B = new Bishop('16', 'black');
@@ -48,196 +231,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         RW2 = new Rook('88','white');
     }
 
-    start();
-    
-
-    //TO DO: MAKE SPACE COLORS ALTERNATE
-    var i = 0;
-    var c1 = 'white';
-    var c2 = 'lightblue';
-    var tmp = '';
-    var board = document.getElementsByClassName("board");
-    for(var i = 0; i < board[0].children.length; i++){
-        var id = board[0].children[i].id;
-        if(i % 2 == 0){
-            document.getElementById(id).style.background = c2;
-        }else{
-            document.getElementById(id).style.background = c1;
-        }
-        if(i >= 1 && (i+1) % 8 == 0){
-            tmp = c1;
-            c1 = c2;
-            c2 = tmp;
-        }
-    }
-
-    function placement(piecename, spot){
-        this.name = piecename;
-        this.spot = spot;
-        this.src = './assets/' + this.name + '.png';
-        console.log(spot);
-        document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
-    }
-
-    function despawn(spot){
-        this.spot = spot;
-        document.getElementById(this.spot).innerHTML = '';
-    }
-        
-    function Bishop(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'bbishop';
-        }else{
-            this.piecename = "wbishop";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-
-    Bishop.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        console.log(this.piecename);
-        if(move[0] = move[1]){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }
-    }
-    
-    B1B.move('13','31');
-
-    function King(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'bking';
-        }else{
-            this.piecename = "wking";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-
-    King.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }
-    }
-
-
-
-
-    function Knight(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'bknight';
-        }else{
-            this.piecename = "wknight";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-
-    Knight.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }
-    }
-
-
-
-    function Pawn(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'bpawn';
-        }else{
-            this.piecename = "wpawn";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-
-    Pawn.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        if(move[0] == 0 && move[1] == 1){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }else if(((move[0] == 0 && move[1] == 2) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }
-    }
-
-
-
-
-    function Queen(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'bqueen';
-        }else{
-            this.piecename = "wqueen";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-    
-    Queen.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        }
-    }
-
-
-    function Rook(spot, color){
-        this.color = color;
-        this.spot = spot;
-        //TO DO: Establish the ability to place a bishop somewhere on the board
-        if(this.color == 'black'){
-            this.piecename = 'brook';
-        }else{
-            this.piecename = "wrook";
-        }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
-    }
-
-    Rook.prototype.move = function(coords, newspot){
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
-        if(move[0] == 0 || move[1] == 0){
-            placement(this.piecename, newspot);
-            despawn(coords);
-        };
-    }
-
-    
+    start();  
 
   
     
