@@ -10,44 +10,46 @@ var matrixsub = function(first, last){
 document.addEventListener("DOMContentLoaded", function(event){
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
 
-
+    var B1B, B2B, KB, KnB1, KnB2, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, QB, RB1, RB2;
+    var B1W, B2W, KW, KnW1, KnW2, PW1, PW2, PW3, PW4, PW5, PW6, PW7, PW8, QW, RW1, RW2;
     function start(){
-        var B1B = new Bishop('13', 'black');
-        var B2B = new Bishop('16', 'black');
-        var KB = new King('14', 'black');
-        var KnB1 = new Knight('12', 'black');
-        var KnB2 = new Knight('17', 'black');
-        var PB1 = new Pawn('21','black');
-        var PB2 = new Pawn('22','black');
-        var PB3 = new Pawn('23','black');
-        var PB4 = new Pawn('24','black');
-        var PB5 = new Pawn('25','black');
-        var PB6 = new Pawn('26','black');
-        var PB7 = new Pawn('27','black');
-        var PB8 = new Pawn('28','black');
-        var QB = new Queen('15','black');
-        var RB1 = new Rook('11','black');
-        var RB2 = new Rook('18','black');
+        B1B = new Bishop('13', 'black');
+        B2B = new Bishop('16', 'black');
+        KB = new King('14', 'black');
+        KnB1 = new Knight('12', 'black');
+        KnB2 = new Knight('17', 'black');
+        PB1 = new Pawn('21','black');
+        PB2 = new Pawn('22','black');
+        PB3 = new Pawn('23','black');
+        PB4 = new Pawn('24','black');
+        PB5 = new Pawn('25','black');
+        PB6 = new Pawn('26','black');
+        PB7 = new Pawn('27','black');
+        PB8 = new Pawn('28','black');
+        QB = new Queen('15','black');
+        RB1 = new Rook('11','black');
+        RB2 = new Rook('18','black');
         
-        var W1W = new Bishop('83', 'white');
-        var W2W = new Bishop('86', 'white');
-        var KW = new King('84', 'white');
-        var KnW1 = new Knight('82', 'white');
-        var KnW2 = new Knight('87', 'white');
-        var PW1 = new Pawn('71','white');
-        var PW2 = new Pawn('72','white');
-        var PW3 = new Pawn('73','white');
-        var PW4 = new Pawn('74','white');
-        var PW5 = new Pawn('75','white');
-        var PW6 = new Pawn('76','white');
-        var PW7 = new Pawn('77','white');
-        var PW8 = new Pawn('78','white');
-        var QW = new Queen('85','white');
-        var RW1 = new Rook('81','white');
-        var RW2 = new Rook('88','white');
-
-
+        B1W = new Bishop('83', 'white');
+        B2W = new Bishop('86', 'white');
+        KW = new King('84', 'white');
+        KnW1 = new Knight('82', 'white');
+        KnW2 = new Knight('87', 'white');
+        PW1 = new Pawn('71','white');
+        PW2 = new Pawn('72','white');
+        PW3 = new Pawn('73','white');
+        PW4 = new Pawn('74','white');
+        PW5 = new Pawn('75','white');
+        PW6 = new Pawn('76','white');
+        PW7 = new Pawn('77','white');
+        PW8 = new Pawn('78','white');
+        QW = new Queen('85','white');
+        RW1 = new Rook('81','white');
+        RW2 = new Rook('88','white');
     }
+
+    start();
+    
 
     //TO DO: MAKE SPACE COLORS ALTERNATE
     var i = 0;
@@ -55,11 +57,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     var c2 = 'lightblue';
     var tmp = '';
     var board = document.getElementsByClassName("board");
-    console.log(board);
-    console.log(board[0].children);
     for(var i = 0; i < board[0].children.length; i++){
         var id = board[0].children[i].id;
-        console.log(i);
         if(i % 2 == 0){
             document.getElementById(id).style.background = c2;
         }else{
@@ -76,12 +75,16 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.name = piecename;
         this.spot = spot;
         this.src = './assets/' + this.name + '.png';
-        console.log(src);
+        console.log(spot);
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
+    }
+
+    function despawn(spot){
+        this.spot = spot;
+        document.getElementById(this.spot).innerHTML = '';
     }
         
     function Bishop(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -98,18 +101,16 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
+        console.log(this.piecename);
         if(move[0] = move[1]){
-            console.log("move seems legitB");
-            $('#'+newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         }
     }
-
-
-
-  
+    
+    B1B.move('13','31');
 
     function King(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -127,8 +128,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
-            console.log("move seems legit King");
-            $('#'+newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         }
     }
 
@@ -136,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
     function Knight(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -154,15 +154,14 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
-            console.log('move seems legit knight')
-            $('#'+newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         }
     }
 
 
 
     function Pawn(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -180,11 +179,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 && move[1] == 1){
-            console.log('move seems legit pawn');
-            $('#'.newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         }else if(((move[0] == 0 && move[1] == 2) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
-            $('#'.newspot).css('background',this.color);
-            console.log('move seems legit pawn');
+            placement(this.piecename, newspot);
+            despawn(coords);
         }
     }
 
@@ -192,7 +191,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
     function Queen(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -210,14 +208,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
-            console.log('move seems legit queen');
-            $('#'.newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         }
     }
 
 
     function Rook(spot, color){
-        console.log(spot);
         this.color = color;
         this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
@@ -235,15 +232,14 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 || move[1] == 0){
-            console.log('move seems legit rook');
-            $('#'.newspot).css('background',this.color);
+            placement(this.piecename, newspot);
+            despawn(coords);
         };
     }
 
     
 
-    start();
-
+  
     
 
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
@@ -272,15 +268,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     
 
-    $('.board').children().click(function(){
-        if(grabbed == false)
-            if(this.attr('piece') == 'none'){
-                alert('clicked an empty space!');
-            }else{
-
-            }
-
-    })
+    
 
 
 })
