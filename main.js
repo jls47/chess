@@ -7,36 +7,91 @@ var matrixsub = function(first, last){
     }
     return move;
 }
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(event){
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
+
+
+    function start(){
+        var B1B = new Bishop('13', 'black');
+        var B2B = new Bishop('16', 'black');
+        var KB = new King('14', 'black');
+        var KnB1 = new Knight('12', 'black');
+        var KnB2 = new Knight('17', 'black');
+        var PB1 = new Pawn('21','black');
+        var PB2 = new Pawn('22','black');
+        var PB3 = new Pawn('23','black');
+        var PB4 = new Pawn('24','black');
+        var PB5 = new Pawn('25','black');
+        var PB6 = new Pawn('26','black');
+        var PB7 = new Pawn('27','black');
+        var PB8 = new Pawn('28','black');
+        var QB = new Queen('15','black');
+        var RB1 = new Rook('11','black');
+        var RB2 = new Rook('18','black');
+        
+        var W1W = new Bishop('83', 'white');
+        var W2W = new Bishop('86', 'white');
+        var KW = new King('84', 'white');
+        var KnW1 = new Knight('82', 'white');
+        var KnW2 = new Knight('87', 'white');
+        var PW1 = new Pawn('71','white');
+        var PW2 = new Pawn('72','white');
+        var PW3 = new Pawn('73','white');
+        var PW4 = new Pawn('74','white');
+        var PW5 = new Pawn('75','white');
+        var PW6 = new Pawn('76','white');
+        var PW7 = new Pawn('77','white');
+        var PW8 = new Pawn('78','white');
+        var QW = new Queen('85','white');
+        var RW1 = new Rook('81','white');
+        var RW2 = new Rook('88','white');
+
+
+    }
 
     //TO DO: MAKE SPACE COLORS ALTERNATE
     var i = 0;
     var c1 = 'white';
     var c2 = 'lightblue';
     var tmp = '';
-    $('.board').children().each(function(){
-        this.id = $(this).attr('id');
-        i++;
+    var board = document.getElementsByClassName("board");
+    console.log(board);
+    console.log(board[0].children);
+    for(var i = 0; i < board[0].children.length; i++){
+        var id = board[0].children[i].id;
+        console.log(i);
         if(i % 2 == 0){
-            $('#'+this.id).css('background',c2);
+            document.getElementById(id).style.background = c2;
         }else{
-            $('#'+this.id).css('background',c1);
+            document.getElementById(id).style.background = c1;
         }
-        if(i % 8 == 0){
+        if(i >= 1 && (i+1) % 8 == 0){
             tmp = c1;
             c1 = c2;
             c2 = tmp;
         }
-    })
+    }
+
+    function placement(piecename, spot){
+        this.name = piecename;
+        this.spot = spot;
+        this.src = './assets/' + this.name + '.png';
+        console.log(src);
+        document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
+    }
         
     function Bishop(spot, color){
         console.log(spot);
         this.color = color;
+        this.spot = spot;
         //TO DO: Establish the ability to place a bishop somewhere on the board
-        $('#'+spot).css('background',this.color);
-        $('#'+spot).attr('piece','bishop');
-        
+        if(this.color == 'black'){
+            this.piecename = 'bbishop';
+        }else{
+            this.piecename = "wbishop";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
 
     Bishop.prototype.move = function(coords, newspot){
@@ -49,17 +104,22 @@ $(document).ready(function(){
         }
     }
 
-    var B1B = new Bishop('13', 'blue');
-    var B2B = new Bishop('16', 'black');
 
 
-
-    B1B.move('34', '23');
+  
 
     function King(spot, color){
         console.log(spot);
         this.color = color;
-        $('#'+spot).css('background', this.color);
+        this.spot = spot;
+        //TO DO: Establish the ability to place a bishop somewhere on the board
+        if(this.color == 'black'){
+            this.piecename = 'bking';
+        }else{
+            this.piecename = "wking";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
 
     King.prototype.move = function(coords, newspot){
@@ -72,14 +132,21 @@ $(document).ready(function(){
         }
     }
 
-    var KB = new King('14', 'black');
 
-    KB.move('34', '33');
+
 
     function Knight(spot, color){
         console.log(spot);
         this.color = color;
-        $('#'+spot).css('background',this.color);
+        this.spot = spot;
+        //TO DO: Establish the ability to place a bishop somewhere on the board
+        if(this.color == 'black'){
+            this.piecename = 'bknight';
+        }else{
+            this.piecename = "wknight";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
 
     Knight.prototype.move = function(coords, newspot){
@@ -92,15 +159,20 @@ $(document).ready(function(){
         }
     }
 
-    var KnB1 = new Knight('12', 'red');
-    var KnB2 = new Knight('17', 'red');
 
-    KnB1.move('12','31')
 
     function Pawn(spot, color){
         console.log(spot);
         this.color = color;
-        $('#'+spot).css('background',this.color);
+        this.spot = spot;
+        //TO DO: Establish the ability to place a bishop somewhere on the board
+        if(this.color == 'black'){
+            this.piecename = 'bpawn';
+        }else{
+            this.piecename = "wpawn";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
 
     Pawn.prototype.move = function(coords, newspot){
@@ -116,21 +188,21 @@ $(document).ready(function(){
         }
     }
 
-    var PB1 = new Pawn('21','darkgrey');
-    var PB2 = new Pawn('22','darkgrey');
-    var PB3 = new Pawn('23','darkgrey');
-    var PB4 = new Pawn('24','darkgrey');
-    var PB5 = new Pawn('25','darkgrey');
-    var PB6 = new Pawn('26','darkgrey');
-    var PB7 = new Pawn('27','darkgrey');
-    var PB8 = new Pawn('28','darkgrey');
 
-    PB1.move('21', '23');
+
 
     function Queen(spot, color){
         console.log(spot);
         this.color = color;
-        $('#'+spot).css('background',this.color);
+        this.spot = spot;
+        //TO DO: Establish the ability to place a bishop somewhere on the board
+        if(this.color == 'black'){
+            this.piecename = 'bqueen';
+        }else{
+            this.piecename = "wqueen";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
     
     Queen.prototype.move = function(coords, newspot){
@@ -142,14 +214,20 @@ $(document).ready(function(){
             $('#'.newspot).css('background',this.color);
         }
     }
-    var QB = new Queen('15','green');
 
-    QB.move('34','38');
 
     function Rook(spot, color){
         console.log(spot);
         this.color = color;
-        $('#'+spot).css('background',this.color);
+        this.spot = spot;
+        //TO DO: Establish the ability to place a bishop somewhere on the board
+        if(this.color == 'black'){
+            this.piecename = 'brook';
+        }else{
+            this.piecename = "wrook";
+        }
+        document.getElementById(spot).className = this.piecename;
+        placement(this.piecename, this.spot);
     }
 
     Rook.prototype.move = function(coords, newspot){
@@ -162,11 +240,9 @@ $(document).ready(function(){
         };
     }
 
-    var RB1 = new Rook('11','lightblue');
-    var RB2 = new Rook('18','lightblue');
+    
 
-    RB1.move('34', '74');
-
+    start();
 
     
 

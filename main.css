@@ -11,7 +11,10 @@
     height: 11%;
     display: inline-block;
     background: white;
+}
 
+img{
+    width: 100%;
 }
 
 @media only screen and (max-width: 700px) {
