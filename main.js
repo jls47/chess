@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    function placement(piecename, spot){
+    function placement(fullname, piecename, spot){
         this.name = piecename;
         this.spot = spot;
         this.src = './assets/' + this.name + '.png';
@@ -46,17 +46,17 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //TO DO: OPTIMIZE OPTIMIZE OPTIMIZE!!!!!!
         
-    function Bishop(spot, color){
+    function Bishop(spot, color, name){
         this.color = color;
         this.spot = spot;
-        
+        this.fullname = name;
         if(this.color == 'black'){
             this.piecename = 'bbishop';
         }else{
             this.piecename = "wbishop";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
 
     Bishop.prototype.move = function(coords, newspot){
@@ -69,17 +69,17 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    function King(spot, color){
+    function King(spot, color, name){
         this.color = color;
         this.spot = spot;
-        
+        this.fullname = name;
         if(this.color == 'black'){
             this.piecename = 'bking';
         }else{
             this.piecename = "wking";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
 
     King.prototype.move = function(coords, newspot){
@@ -95,17 +95,17 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
 
-    function Knight(spot, color){
+    function Knight(spot, color, name){
         this.color = color;
         this.spot = spot;
-        
+        this.fullname = name;
         if(this.color == 'black'){
             this.piecename = 'bknight';
         }else{
             this.piecename = "wknight";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
 
     Knight.prototype.move = function(coords, newspot){
@@ -120,17 +120,17 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
 
-    function Pawn(spot, color){
+    function Pawn(spot, color, name){
         this.color = color;
         this.spot = spot;
-        
+        this.fullname = name;
         if(this.color == 'black'){
             this.piecename = 'bpawn';
         }else{
             this.piecename = "wpawn";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
 
     Pawn.prototype.move = function(coords, newspot){
@@ -147,19 +147,18 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
 
-
-
-    function Queen(spot, color){
+    function Queen(spot, color, name){
         this.color = color;
         this.spot = spot;
+        this.fullname = name;
         
         if(this.color == 'black'){
             this.piecename = 'bqueen';
         }else{
             this.piecename = "wqueen";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
     
     Queen.prototype.move = function(coords, newspot){
@@ -172,17 +171,17 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    function Rook(spot, color){
+    function Rook(spot, color, name){
         this.color = color;
         this.spot = spot;
-        
+        this.fullname = name;
         if(this.color == 'black'){
             this.piecename = 'brook';
         }else{
             this.piecename = "wrook";
         }
-        document.getElementById(spot).className = this.piecename;
-        placement(this.piecename, this.spot);
+        document.getElementById(spot).className = this.fullname;
+        placement(this.fullname, this.piecename, this.spot);
     }
 
     Rook.prototype.move = function(coords, newspot){
@@ -196,40 +195,42 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     function start(){
-        B1B = new Bishop('13', 'black');
-        B2B = new Bishop('16', 'black');
-        KB = new King('14', 'black');
-        KnB1 = new Knight('12', 'black');
-        KnB2 = new Knight('17', 'black');
-        PB1 = new Pawn('21','black');
-        PB2 = new Pawn('22','black');
-        PB3 = new Pawn('23','black');
-        PB4 = new Pawn('24','black');
-        PB5 = new Pawn('25','black');
-        PB6 = new Pawn('26','black');
-        PB7 = new Pawn('27','black');
-        PB8 = new Pawn('28','black');
-        QB = new Queen('15','black');
-        RB1 = new Rook('11','black');
-        RB2 = new Rook('18','black');
+        Bblack1 = new Bishop('13', 'black', 'Bblack1');
+        Bblack2 = new Bishop('16', 'black', 'Bblack2');
+        Kblack = new King('14', 'black', 'Kblack');
+        Knblack1 = new Knight('12', 'black', 'Knblack1');
+        Knblack2 = new Knight('17', 'black', 'Knblack2');
+        Pblack1 = new Pawn('21','black', 'Pblack1');
+        Pblack2 = new Pawn('22','black', 'Pblack2');
+        Pblack3 = new Pawn('23','black', 'Pblack3');
+        Pblack4 = new Pawn('24','black', 'Pblack4');
+        Pblack5 = new Pawn('25','black', 'Pblack5');
+        Pblack6 = new Pawn('26','black', 'Pblack6');
+        Pblack7 = new Pawn('27','black', 'Pblack7');
+        Pblack8 = new Pawn('28','black', 'Pblack8');
+        Qblack = new Queen('15','black', 'Qblack');
+        Rblack1 = new Rook('11','black', 'Rblack1');
+        Rblack2 = new Rook('18','black', 'Rblack1');
         
-        B1W = new Bishop('83', 'white');
-        B2W = new Bishop('86', 'white');
-        KW = new King('84', 'white');
-        KnW1 = new Knight('82', 'white');
-        KnW2 = new Knight('87', 'white');
-        PW1 = new Pawn('71','white');
-        PW2 = new Pawn('72','white');
-        PW3 = new Pawn('73','white');
-        PW4 = new Pawn('74','white');
-        PW5 = new Pawn('75','white');
-        PW6 = new Pawn('76','white');
-        PW7 = new Pawn('77','white');
-        PW8 = new Pawn('78','white');
-        QW = new Queen('85','white');
-        RW1 = new Rook('81','white');
-        RW2 = new Rook('88','white');
+        Bwhite1 = new Bishop('83', 'white', 'Bwhite1');
+        Bwhite2 = new Bishop('86', 'white', 'Bwhite2');
+        Kwhite = new King('84', 'white', 'Kwhite');
+        Knwhite1 = new Knight('82', 'white', 'Knwhite1');
+        Knwhite2 = new Knight('87', 'white', 'Knwhite2');
+        Pwhite1 = new Pawn('71','white', 'Pwhite1');
+        Pwhite2 = new Pawn('72','white', 'Pwhite2');
+        Pwhite3 = new Pawn('73','white', 'Pwhite3');
+        Pwhite4 = new Pawn('74','white', 'Pwhite4');
+        Pwhite5 = new Pawn('75','white', 'Pwhite5');
+        Pwhite6 = new Pawn('76','white', 'Pwhite6');
+        Pwhite7 = new Pawn('77','white', 'Pwhite7');
+        Pwhite8 = new Pawn('78','white', 'Pwhite8');
+        Qwhite = new Queen('85','white', 'Qwhite');
+        Rwhite1 = new Rook('81','white', 'Rwhite1');
+        Rwhite2 = new Rook('88','white', 'Rwhite2');
     }
+
+    
 
     start();  
 
@@ -239,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
     //FIRST: I must recognize when a piece has been clicked and trigger
     //a state of clicked-ness-add variable name to localstorage
+    //To do this, I need to add listeners to each and every child div.
     //SECOND: When this piece has been clicked, I need to show users
     //where they can possibly go-for all child divs, check if move is legit-
     //if legit, show yellow, if not, show red, if piece taking chance orange
@@ -248,8 +250,13 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Fifth: If occupied by friendly, I must switch the piece.  If occupied
     //by foe, I must remove that piece and place it in the bin.
     //Sixth: I must update the css to display changes.
-
     
+    console.log(board[0].children);
+    board[0].children.click = function(){
+        console.log("butts");
+        
+        
+    };
 
     
 
