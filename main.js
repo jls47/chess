@@ -13,8 +13,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     var B1B, B2B, KB, KnB1, KnB2, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, QB, RB1, RB2;
     var B1W, B2W, KW, KnW1, KnW2, PW1, PW2, PW3, PW4, PW5, PW6, PW7, PW8, QW, RW1, RW2;
     
-
-    //TO DO: MAKE SPACE COLORS ALTERNATE
     var i = 0;
     var c1 = 'white';
     var c2 = 'lightblue';
@@ -45,6 +43,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         document.getElementById(this.spot).innerHTML = '';
     }
+
+    //TO DO: OPTIMIZE OPTIMIZE OPTIMIZE!!!!!!
         
     function Bishop(spot, color){
         this.color = color;
@@ -238,10 +238,11 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
     //FIRST: I must recognize when a piece has been clicked and trigger
-    //a state of clicked-ness
+    //a state of clicked-ness-add variable name to localstorage
     //SECOND: When this piece has been clicked, I need to show users
-    //where they can possibly go
-    //THIRD: I need to be ready for the next click
+    //where they can possibly go-for all child divs, check if move is legit-
+    //if legit, show yellow, if not, show red, if piece taking chance orange
+    //THIRD: I need to be ready for the next click-if legit move for next piece, trigger move
     //FOURTH: Upon the next click, I need to see if its either open space
     //or occupied
     //Fifth: If occupied by friendly, I must switch the piece.  If occupied
