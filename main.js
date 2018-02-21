@@ -10,8 +10,8 @@ var matrixsub = function(first, last){
 document.addEventListener("DOMContentLoaded", function(event){
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
 
-    var B1black, B2black,  Kblack, Knblack1, Knblack2, Pblack1, Pblack2, Pblack3, Pblack4, Pblack5, Pblack6, Pblack7, Pblack8, Qblack, Rblack1, Rblack2;    
-    var B1white, B2white, Kwhite, Knwhite1, Knwhite2, Pwhite1, Pwhite2, Pwhite3, Pwhite4, Pwhite5, Pwhite6, Pwhite7, Pwhite8, Qwhite, Rwhite1, Rwhite2;
+    var Bblack1, Bblack2,  Kblack, Knblack1, Knblack2, Pblack1, Pblack2, Pblack3, Pblack4, Pblack5, Pblack6, Pblack7, Pblack8, Qblack, Rblack1, Rblack2;    
+    var Bwhite1, Bwhite2, Kwhite, Knwhite1, Knwhite2, Pwhite1, Pwhite2, Pwhite3, Pwhite4, Pwhite5, Pwhite6, Pwhite7, Pwhite8, Qwhite, Rwhite1, Rwhite2;
     
     var i = 0;
     var c1 = 'white';
