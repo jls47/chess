@@ -10,8 +10,8 @@ var matrixsub = function(first, last){
 document.addEventListener("DOMContentLoaded", function(event){
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
 
-    var B1B, B2B, KB, KnB1, KnB2, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, QB, RB1, RB2;
-    var B1W, B2W, KW, KnW1, KnW2, PW1, PW2, PW3, PW4, PW5, PW6, PW7, PW8, QW, RW1, RW2;
+    var B1black, B2black,  Kblack, Knblack1, Knblack2, Pblack1, Pblack2, Pblack3, Pblack4, Pblack5, Pblack6, Pblack7, Pblack8, Qblack, Rblack1, Rblack2;    
+    var B1white, B2white, Kwhite, Knwhite1, Knwhite2, Pwhite1, Pwhite2, Pwhite3, Pwhite4, Pwhite5, Pwhite6, Pwhite7, Pwhite8, Qwhite, Rwhite1, Rwhite2;
     
     var i = 0;
     var c1 = 'white';
@@ -249,17 +249,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //by foe, I must remove that piece and place it in the bin.
     //Sixth: I must update the css to display changes.
 
-    var possmoves = function(piece, origin){
-        
-    }
-
-    var startmove = function(piece, origin){
-
-    }
-
-    var endmove = function(piece, dest){
-
-    }
+    
 
     
 
