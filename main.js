@@ -32,11 +32,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    function placement(fullname, piecename, spot){
+    function placement(fullname, piecename, spot, color){
         this.name = piecename;
         this.spot = spot;
         this.src = './assets/' + this.name + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
+        document.getElementById(this.spot).setAttribute('color', color);
     }
 
     function despawn(spot){
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wbishop";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
     Bishop.prototype.move = function(coords, newspot){
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wking";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
     King.prototype.move = function(coords, newspot){
@@ -105,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wknight";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
     Knight.prototype.move = function(coords, newspot){
@@ -130,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wpawn";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
     Pawn.prototype.move = function(coords, newspot){
@@ -158,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wqueen";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
     
     Queen.prototype.move = function(coords, newspot){
@@ -181,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             this.piecename = "wrook";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
     Rook.prototype.move = function(coords, newspot){
