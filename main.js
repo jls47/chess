@@ -253,7 +253,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Sixth: I must update the css to display changes.
     
     console.log(board[0].children);
-    board[0].children.click = function(){
+    spaces = document.querySelectorAll("[space = 'true']");
+    console.log(spaces);
+    spaces.onclick = function(){
         console.log("butts");
         
         
