@@ -7,6 +7,14 @@ var matrixsub = function(first, last){
     }
     return move;
 }
+
+var pawnmatrixSub = function(first, last){
+    var move = [];
+    for(var i = 0; i < 2; i++){
+        move.push(first[i]-last[i]);
+    }
+    return move;
+}
 document.addEventListener("DOMContentLoaded", function(event){
     //THIS SECTION IS FOR PIECES AND THEIR BEHAVIOR
 
@@ -61,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Bishop.prototype.move = function(coords, newspot){
+    Bishop.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
@@ -86,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    King.prototype.move = function(coords, newspot){
+    King.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
@@ -114,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Knight.prototype.move = function(coords, newspot){
+    Knight.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
@@ -141,15 +149,17 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Pawn.prototype.move = function(coords, newspot){
+
+    Pawn.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
+        console.log(color);
         if(move[0] == 1 && move[1] == 0){
             console.log(coords + " " + newspot);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 2 && move[1] == 0) && coords[2] == 7)){
+        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 2 && move[1] == 0) && coords[0] == 7)){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
@@ -172,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
     
-    Queen.prototype.move = function(coords, newspot){
+    Queen.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
@@ -197,17 +207,17 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Rook.prototype.move = function(coords, newspot){
+    Rook.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 || move[1] == 0){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-            return True;
+            return true;
         }else{
             alert('cannot move there');   
-            return False;
+            return false;
         };
     }
 
@@ -350,22 +360,22 @@ document.addEventListener("DOMContentLoaded", function(event){
     //example movement: Pwhite7.move('77','67');
 
     localStorage.setItem("clickedpiece","none");
-
     for (let space of spaces){
         space.addEventListener('click', function(){
-            console.log('click triggered')
             console.log(this.className);
-            
+            console.log(this.getAttribute("color"));
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
                 console.log("pick another piece!")
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 localStorage.setItem("clickedpiece",this.className);
                 localStorage.setItem("oldcoords", this.id);
+                localStorage.setItem("color",this.getAttribute("color"));
             }else if(localStorage.getItem("clickedpiece") != "none" && this.className == "none"){
-                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id);
+                console.log(this.getAttribute("color"));
+                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
-                
+                localStorage.setItem("color","none")
             }
 
 
