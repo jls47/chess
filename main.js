@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     function despawn(spot){
         this.spot = spot;
         document.getElementById(this.spot).innerHTML = '';
+        document.getElementById(this.spot).setAttribute('class','none');
     }
 
     //TO DO: OPTIMIZE OPTIMIZE OPTIMIZE!!!!!!
@@ -394,14 +395,13 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("color","none")
             }
 
-
-
-
         });
     }
     var resetspacecolor = function(oldstyle, coords){
         document.getElementById(coords).style.background = oldstyle;
     }
+
+    //NEXT UP: ATTACKING, TURNS, SPECIAL RULES
 
 
     
