@@ -65,9 +65,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] = move[1]){
-            placement(this.piecename, newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }
+        }else{
+            alert('cannot move there');   
+        };
     }
 
     function King(spot, color, name){
@@ -88,9 +90,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
-            placement(this.piecename, newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }
+        }else{
+            alert('cannot move there');   
+        };
     }
 
 
@@ -114,9 +118,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
-            placement(this.piecename, newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }
+        }else{
+            alert('cannot move there');   
+        };
     }
 
 
@@ -138,13 +144,16 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
-        if(move[0] == 0 && move[1] == 1){
-            placement(this.piecename, newspot);
+        if(move[0] == 1 && move[1] == 0){
+            console.log(coords + " " + newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }else if(((move[0] == 0 && move[1] == 2) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
-            placement(this.piecename, newspot);
+        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }
+        }else{
+            alert('cannot move there');   
+        };
     }
 
 
@@ -167,9 +176,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
-            placement(this.piecename, newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }
+        }else{
+            alert('cannot move there');   
+        };
     }
 
     function Rook(spot, color, name){
@@ -190,11 +201,51 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixsub(coords, newspot);
         if(move[0] == 0 || move[1] == 0){
-            placement(this.piecename, newspot);
+            placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            return True;
+        }else{
+            alert('cannot move there');   
+            return False;
         };
     }
 
+    var toPiece = {
+        'Bblack1': Bblack1,
+        'Bblack2': Bblack2,
+        'Kblack': Kblack,
+        'Knblack1': Knblack1,
+        'Knblack2': Knblack2,
+        'Pblack1': Pblack1,
+        'Pblack2': Pblack2,
+        'Pblack3': Pblack3,
+        'Pblack4': Pblack4,
+        'Pblack5': Pblack5,
+        'Pblack6': Pblack6,
+        'Pblack7': Pblack7,
+        'Pblack8': Pblack8,
+        'Qblack': Qblack,
+        'Rblack1': Rblack1,
+        'Rblack2': Rblack2,
+        'Bwhite1': Bwhite1,
+        'Bwhite2': Bwhite2,
+        'Kwhite': Kwhite,
+        'Knwhite1': Knwhite1,
+        'Knwhite2': Knwhite2,
+        'Pwhite1': Pwhite1,
+        'Pwhite2': Pwhite2,
+        'Pwhite3': Pwhite3,
+        'Pwhite4': Pwhite4,
+        'Pwhite5': Pwhite5,
+        'Pwhite6': Pwhite6,
+        'Pwhite7': Pwhite7,
+        'Pwhite8': Pwhite8,
+        'Qwhite': Qwhite,
+        'Rwhite1': Rwhite1,
+        'Rwhite2': Rwhite2,
+    }
+
+    //Reorganize these into objects of objects
     function start(){
         Bblack1 = new Bishop('13', 'black', 'Bblack1');
         Bblack2 = new Bishop('16', 'black', 'Bblack2');
@@ -229,13 +280,50 @@ document.addEventListener("DOMContentLoaded", function(event){
         Qwhite = new Queen('85','white', 'Qwhite');
         Rwhite1 = new Rook('81','white', 'Rwhite1');
         Rwhite2 = new Rook('88','white', 'Rwhite2');
+
+        toPiece = {
+            'Bblack1': Bblack1,
+            'Bblack2': Bblack2,
+            'Kblack': Kblack,
+            'Knblack1': Knblack1,
+            'Knblack2': Knblack2,
+            'Pblack1': Pblack1,
+            'Pblack2': Pblack2,
+            'Pblack3': Pblack3,
+            'Pblack4': Pblack4,
+            'Pblack5': Pblack5,
+            'Pblack6': Pblack6,
+            'Pblack7': Pblack7,
+            'Pblack8': Pblack8,
+            'Qblack': Qblack,
+            'Rblack1': Rblack1,
+            'Rblack2': Rblack2,
+            'Bwhite1': Bwhite1,
+            'Bwhite2': Bwhite2,
+            'Kwhite': Kwhite,
+            'Knwhite1': Knwhite1,
+            'Knwhite2': Knwhite2,
+            'Pwhite1': Pwhite1,
+            'Pwhite2': Pwhite2,
+            'Pwhite3': Pwhite3,
+            'Pwhite4': Pwhite4,
+            'Pwhite5': Pwhite5,
+            'Pwhite6': Pwhite6,
+            'Pwhite7': Pwhite7,
+            'Pwhite8': Pwhite8,
+            'Qwhite': Qwhite,
+            'Rwhite1': Rwhite1,
+            'Rwhite2': Rwhite2,
+        }
     }
+
+    
 
     
 
     start();  
 
-  
+    
     
 
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
@@ -253,13 +341,39 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Sixth: I must update the css to display changes.
     
     console.log(board[0].children);
+    var board = document.getElementsByClassName("board");
     spaces = document.querySelectorAll("[space = 'true']");
     console.log(spaces);
-    spaces.onclick = function(){
-        console.log("butts");
-        
-        
-    };
+
+    
+    //example movement: Pwhite7.move('77','67');
+
+    localStorage.setItem("clickedpiece","none");
+
+    for (let space of spaces){
+        space.addEventListener('click', function(){
+            console.log('click triggered')
+            console.log(this.className);
+            
+            if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
+                console.log("pick another piece!")
+            }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
+                localStorage.setItem("clickedpiece",this.className);
+                localStorage.setItem("oldcoords", this.id)
+            }else if(localStorage.getItem("clickedpiece") != "none" && this.className == "none"){
+                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id);
+                localStorage.setItem("clickedpiece","none");
+            }
+
+
+
+
+        });
+    }
+    var resetspacecolor = function(oldstyle, coords){
+        document.getElementById(coords).style.background = oldstyle;
+    }
+
 
     
 
