@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.src = './assets/' + this.name + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
         document.getElementById(this.spot).setAttribute('color', color);
+        document.getElementById(this.spot).setAttribute('class', fullname);
     }
 
     function despawn(spot){
@@ -359,10 +360,12 @@ document.addEventListener("DOMContentLoaded", function(event){
                 console.log("pick another piece!")
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 localStorage.setItem("clickedpiece",this.className);
-                localStorage.setItem("oldcoords", this.id)
+                localStorage.setItem("oldcoords", this.id);
             }else if(localStorage.getItem("clickedpiece") != "none" && this.className == "none"){
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id);
                 localStorage.setItem("clickedpiece","none");
+                localStorage.setItem("oldcoords", "none");
+                
             }
 
 
