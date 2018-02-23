@@ -1,4 +1,4 @@
-var matrixsub = function(first, last){
+var matrixSub = function(first, last){
     var move = [];
     for(var i = 0; i < 2; i++){
 
@@ -8,7 +8,7 @@ var matrixsub = function(first, last){
     return move;
 }
 
-var pawnmatrixSub = function(first, last){
+var pawnMatrixSub = function(first, last){
     var move = [];
     for(var i = 0; i < 2; i++){
         move.push(first[i]-last[i]);
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Bishop.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        var move = matrixSub(coords, newspot);
         if(move[0] = move[1]){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     King.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        var move = matrixSub(coords, newspot);
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Knight.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        var move = matrixSub(coords, newspot);
         if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -153,18 +153,34 @@ document.addEventListener("DOMContentLoaded", function(event){
     Pawn.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        this.color = color;
+        var move = pawnMatrixSub(coords, newspot);
+        console.log(move);
         console.log(color);
-        if(move[0] == 1 && move[1] == 0){
-            console.log(coords + " " + newspot);
-            placement(this.fullname, this.piecename, newspot, this.color);
-            despawn(coords);
-        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 2 && move[1] == 0) && coords[0] == 7)){
-            placement(this.fullname, this.piecename, newspot, this.color);
-            despawn(coords);
-        }else{
-            alert('cannot move there');   
-        };
+        console.log(this.color == 'black');
+        
+
+        if(this.color == 'black'){
+            if(move[0] == -1 && move[1] == 0){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else{
+                alert('cannot move there')
+            }
+        }else if(this.color == 'white'){
+            if(move[0] == 1 && move[1] == 0){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else{
+                alert('cannot move there')
+            }
+        }
     }
 
 
@@ -185,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Queen.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        var move = matrixSub(coords, newspot);
         if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -210,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Rook.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixsub(coords, newspot);
+        var move = matrixSub(coords, newspot);
         if(move[0] == 0 || move[1] == 0){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
