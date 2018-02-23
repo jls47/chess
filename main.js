@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             console.log(coords + " " + newspot);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 0 && move[1] == 2) && coords[2] == 7)){
+        }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 2) || ((move[0] == 2 && move[1] == 0) && coords[2] == 7)){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
