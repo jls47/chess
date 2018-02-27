@@ -55,6 +55,22 @@ document.addEventListener("DOMContentLoaded", function(event){
         document.getElementById(this.spot).setAttribute('class','none');
     }
 
+    function capture(spot, fullname, imagetext){
+        //use regex to split the image name from the imagetext innerhtml
+        this.spot = spot;
+        this.name = fullname;
+        console.log(imagetext);
+        if(this.name.includes('black')){
+            wcapturedPieces.push(this.name);
+            localStorage.setItem('wcaptured', JSON.stringify(wcapturedPieces));
+        }else{
+            bcapturedPieces.push(this.name);
+            localStorage.setItem('bcaptured', JSON.stringify(bcapturedPieces));
+        }
+        document.getElementById(this.spot).setAttribute('class','none');
+        document.getElementById(this.spot).innerHTML = '';
+    }
+
     //TO DO: OPTIMIZE OPTIMIZE OPTIMIZE!!!!!!
         
     function Bishop(spot, color, name){
@@ -62,9 +78,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.fullname = name;
         if(this.color == 'black'){
-            this.piecename = 'bbishop';
+            this.piecename = 'bbish';
         }else{
-            this.piecename = "wbishop";
+            this.piecename = "wbish";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot, this.color);
@@ -115,9 +131,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.fullname = name;
         if(this.color == 'black'){
-            this.piecename = 'bknight';
+            this.piecename = 'bkngt';
         }else{
-            this.piecename = "wknight";
+            this.piecename = "wkngt";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot, this.color);
@@ -191,9 +207,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.fullname = name;
         
         if(this.color == 'black'){
-            this.piecename = 'bqueen';
+            this.piecename = 'bquen';
         }else{
-            this.piecename = "wqueen";
+            this.piecename = "wquen";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot, this.color);
@@ -376,23 +392,48 @@ document.addEventListener("DOMContentLoaded", function(event){
     
     //example movement: Pwhite7.move('77','67');
 
+    //Flip a coin to decide who goes first
+    //Set localstorage value to equal the color?
+    //iterate turn count every time a piece is moved
+
+    //Need to despawn stuff
+
+    var turn = 0;
+
+    var bcapturedPieces = [];
+    var wcapturedPieces = [];
+
     localStorage.setItem("clickedpiece","none");
     for (let space of spaces){
         space.addEventListener('click', function(){
             console.log(this.className);
             console.log(this.getAttribute("color"));
+            console.log(this.innerHTML); 
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
                 console.log("pick another piece!")
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 localStorage.setItem("clickedpiece",this.className);
                 localStorage.setItem("oldcoords", this.id);
                 localStorage.setItem("color",this.getAttribute("color"));
-            }else if(localStorage.getItem("clickedpiece") != "none" && this.className == "none"){
+                console.log(this.innerHTML.toString())
+                var html = this.innerHTML.toString();
+                console.log(html.slice(19,24));
+            }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
                 console.log(this.getAttribute("color"));
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")
+                
+                turn += 1;
+            }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none")){
+                turn += 1;
+                capture(this.id, this.className, this.innerHTML.slice(19,24));
+                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
+                localStorage.setItem("clickedpiece","none");
+                localStorage.setItem("oldcoords", "none");
+                localStorage.setItem("color","none");
+                //actual capturing needs to take place
             }
 
         });
