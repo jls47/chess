@@ -396,12 +396,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Set localstorage value to equal the color?
     //iterate turn count every time a piece is moved
 
-    //NEXT UP:  I NEED TO IMPLEMENT:
-    //PAWN RULES []
-    //COLORING POSSIBLE SPACES
-    //DISALLOWING SPACE JUMPING AND INDICATING THIS
-    //PROMPTING A POPUP WHEN PIECES ARE SWITCHED
-
     //Need to despawn stuff
 
     var turn = 0;
@@ -412,6 +406,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     localStorage.setItem("clickedpiece","none");
     for (let space of spaces){
         space.addEventListener('click', function(){
+            console.log(this.className);
+            console.log(this.getAttribute("color"));
+            console.log(this.innerHTML); 
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
                 console.log("pick another piece!")
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
@@ -422,26 +419,30 @@ document.addEventListener("DOMContentLoaded", function(event){
                 var html = this.innerHTML.toString();
                 console.log(html.slice(19,24));
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
+                console.log(this.getAttribute("color"));
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")
                 
                 turn += 1;
-            }else if((localStorage.getItem("clickedpiece" != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className)){
+            }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none")) && localStorage.getItem("clickedpiece") != this.className){
                 turn += 1;
                 capture(this.id, this.className, this.innerHTML.slice(19,24));
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none");
-            };
+                //actual capturing needs to take place
+            }
+
         });
     }
     var resetspacecolor = function(oldstyle, coords){
         document.getElementById(coords).style.background = oldstyle;
     }
 
+    //NEXT UP: ATTACKING, TURNS, SPECIAL RULES
 
 
     
