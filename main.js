@@ -166,22 +166,27 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
+    //If something in [1,1] space absolute value from pawn, pawn can move to that spot.  
+    //Fuck!  How to I get it to only move there and not diagonally the other way?!
 
     Pawn.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         this.color = color;
+        var amove = matrixSub(coords, newspot);
         var move = pawnMatrixSub(coords, newspot);
         console.log(move);
         console.log(color);
         console.log(this.color == 'black');
-        
 
         if(this.color == 'black'){
             if(move[0] == -1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else if((move[0] == -1 && amove[1] == 1) && localStorage.getItem("captured") == "true"){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else{
@@ -192,6 +197,9 @@ document.addEventListener("DOMContentLoaded", function(event){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
+                placement(this.fullname, this.piecename, newspot, this.color);
+                despawn(coords);
+            }else if((move[0] == 1 && amove[1] == 1) && localStorage.getItem("captured") == "true"){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else{
@@ -429,7 +437,9 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none")) && localStorage.getItem("clickedpiece") != this.className){
                 turn += 1;
                 capture(this.id, this.className, this.innerHTML.slice(19,24));
+                localStorage.setItem("captured","true");
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
+                localStorage.setItem("captured","false");
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none");
