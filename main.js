@@ -166,8 +166,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    //If something in [1,1] space absolute value from pawn, pawn can move to that spot.  
-    //Fuck!  How to I get it to only move there and not diagonally the other way?!
+    //Proper pawn attacking done.  The problem is it can still attack by moving forward.
+    //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
+    //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
+    //Need to set up css changes to add to this-make square images of low opacity for highlights?  Stack them below piece images?
+    //Create new piece images?  Argh!
 
     Pawn.prototype.move = function(coords, newspot, color){
         this.coords = coords.split("");
