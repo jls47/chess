@@ -1,9 +1,5 @@
 
-    //Proper pawn attacking done.  The problem is it can still attack by moving forward.
-    //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
-    //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
-    //Need to set up css changes to add to this-make square images of low opacity for highlights?  Stack them below piece images?
-    //Create new piece images?  Argh!
+
 
 var matrixSub = function(first, last){
     var move = [];
@@ -63,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     function capture(spot, fullname, imagetext){
-        //use regex to split the image name from the imagetext innerhtml
         this.spot = spot;
         this.name = fullname;
         console.log(imagetext);
@@ -165,9 +160,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.fullname = name;
         if(this.color == 'black'){
-            this.piecename = 'bpawn';
+            this.piecename = 'bpaun';
         }else{
-            this.piecename = "wpawn";
+            this.piecename = "wpaun";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot, this.color);
@@ -384,18 +379,18 @@ document.addEventListener("DOMContentLoaded", function(event){
     
 
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
-    //FIRST: I must recognize when a piece has been clicked and trigger
-    //a state of clicked-ness-add variable name to localstorage
-    //To do this, I need to add listeners to each and every child div.
     //SECOND: When this piece has been clicked, I need to show users
     //where they can possibly go-for all child divs, check if move is legit-
     //if legit, show yellow, if not, show red, if piece taking chance orange
-    //THIRD: I need to be ready for the next click-if legit move for next piece, trigger move
-    //FOURTH: Upon the next click, I need to see if its either open space
-    //or occupied
     //Fifth: If occupied by friendly, I must switch the piece.  If occupied
     //by foe, I must remove that piece and place it in the bin.
     //Sixth: I must update the css to display changes.
+
+    //Proper pawn attacking done.  The problem is it can still attack by moving forward.
+    //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
+    //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
+    //Need to set up css changes to add to this-make square images of low opacity for highlights?  Stack them below piece images?
+    //Create new piece images?  Argh!
     
     console.log(board[0].children);
     var board = document.getElementsByClassName("board");
@@ -439,16 +434,24 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("color","none")
                 
                 turn += 1;
-            }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none")) && localStorage.getItem("clickedpiece") != this.className){
-                turn += 1;
-                capture(this.id, this.className, this.innerHTML.slice(19,24));
-                localStorage.setItem("captured","true");
-                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
-                localStorage.setItem("captured","false");
-                localStorage.setItem("clickedpiece","none");
-                localStorage.setItem("oldcoords", "none");
-                localStorage.setItem("color","none");
-                //actual capturing needs to take place
+
+                //I need to turn friendly fire off
+            }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
+                console.log(this.className);
+                if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
+                    console.log('butts');
+                    turn += 1;
+                    capture(this.id, this.className, this.innerHTML.slice(19,24));
+                    localStorage.setItem("captured","true");
+                    toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
+                    localStorage.setItem("captured","false");
+                    localStorage.setItem("clickedpiece","none");
+                    localStorage.setItem("oldcoords", "none");
+                    localStorage.setItem("color","none");
+                }else{
+                    alert('No friendly fire!');
+                }
+                
             }
 
         });
