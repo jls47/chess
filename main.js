@@ -169,17 +169,15 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
 
-    Pawn.prototype.move = function(coords, newspot, color){
+    Pawn.prototype.move = function(coords, newspot){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        this.color = color;
         var amove = matrixSub(coords, newspot);
         var move = pawnMatrixSub(coords, newspot);
+        console.log(this.piecename);
         console.log(move);
-        console.log(color);
-        console.log(this.color == 'black');
 
-        if(this.color == 'black'){
+        if(this.piecename.includes('b')){
             if(move[0] == -1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
@@ -192,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else{
                 alert('cannot move there')
             }
-        }else if(this.color == 'white'){
+        }else if(this.piecename.includes('w')){
             if(move[0] == 1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
@@ -422,12 +420,10 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 localStorage.setItem("clickedpiece",this.className);
                 localStorage.setItem("oldcoords", this.id);
-                localStorage.setItem("color",this.getAttribute("color"));
                 console.log(this.innerHTML.toString())
                 var html = this.innerHTML.toString();
                 console.log(html.slice(19,24));
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
-                console.log(this.getAttribute("color"));
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
@@ -447,8 +443,9 @@ document.addEventListener("DOMContentLoaded", function(event){
                     localStorage.setItem("captured","false");
                     localStorage.setItem("clickedpiece","none");
                     localStorage.setItem("oldcoords", "none");
-                    localStorage.setItem("color","none");
                 }else{
+                    localStorage.setItem("clickedpiece",this.className);
+                    localStorage.setItem("oldcoords", this.id);
                     alert('No friendly fire!');
                 }
                 
