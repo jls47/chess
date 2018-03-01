@@ -88,15 +88,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Bishop.prototype.move = function(coords, newspot, color){
+    Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if(move[0] = move[1]){
+        if(move[0] == move[1] && captured == 'false'){
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
+        }else if(move[0] == move[1] && captured == 'true'){
+            capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
-            alert('cannot move there');   
+            alert('Cannot move there!');   
         };
     }
 
@@ -113,15 +117,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    King.prototype.move = function(coords, newspot, color){
+    King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
+        if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'false'){
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
+        }else if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'true'){
+            capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
-            alert('cannot move there');   
+            alert("Cannot move there!");
         };
     }
 
@@ -141,16 +149,20 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Knight.prototype.move = function(coords, newspot, color){
+    Knight.prototype.move = function(coords, newspot, color, capture, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
+        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && capture == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+        }else if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && capture == 'true'){
+            capture(newspot, fullname, imagetext);
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords); 
         }else{
-            alert('cannot move there');   
-        };
+            alert("Cannot move there!");
+        }
     }
 
 
@@ -169,39 +181,45 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
 
-    Pawn.prototype.move = function(coords, newspot){
+    Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var amove = matrixSub(coords, newspot);
         var move = pawnMatrixSub(coords, newspot);
-        console.log(this.piecename);
-        console.log(move);
 
         if(this.piecename.includes('b')){
-            if(move[0] == -1 && move[1] == 0){
+            if((move[0] == -1 && move[1] == 0) && captured == "false"){
+                console.log('buzz');
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+            }else if((move[0] == -1 && move[1] == 0) && captured == 'true'){
+                alert("Can't capture that!")
             }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
-            }else if((move[0] == -1 && amove[1] == 1) && localStorage.getItem("captured") == "true"){
+            }else if((move[0] == -1 && amove[1] == 1) && captured == "true"){
+                capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else{
-                alert('cannot move there')
+                console.log(move[0] + ' ' + move[1] + ' ' + captured);
+                alert('Cannot move there!')
             }
         }else if(this.piecename.includes('w')){
             if(move[0] == 1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+            }else if((move[0] == 1 && move[1] == 0) && captured == 'true'){
+                alert("Can't capture that!")
             }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
-            }else if((move[0] == 1 && amove[1] == 1) && localStorage.getItem("captured") == "true"){
+            }else if((move[0] == 1 && amove[1] == 1) && captured == "true"){
+                capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
             }else{
-                alert('cannot move there')
+                alert('Cannot move there!')
             }
         }
     }
@@ -221,16 +239,20 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
     
-    Queen.prototype.move = function(coords, newspot, color){
+    Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if(move[0] == move[1] || move[0] == 0 || move[1] == 0){
+        if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'false'){
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
+        }else if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'true'){
+            capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
-            alert('cannot move there');   
-        };
+            alert("Cannot move there!");
+        }
     }
 
     function Rook(spot, color, name){
@@ -246,18 +268,20 @@ document.addEventListener("DOMContentLoaded", function(event){
         placement(this.fullname, this.piecename, this.spot, this.color);
     }
 
-    Rook.prototype.move = function(coords, newspot, color){
+    Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if(move[0] == 0 || move[1] == 0){
+        if((move[0] == 0 || move[1] == 0) && captured == false){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-            return true;
+        }else if((move[0] == 0 || move[1] == 0) && captured == true){
+            capture(newspot, fullname, imagetext);
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
         }else{
-            alert('cannot move there');   
-            return false;
-        };
+            alert('Cannot move there!');
+        }
     }
 
     var toPiece = {
@@ -367,17 +391,10 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    
-
-    
-
     start();  
 
-    
-    
-
     //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
-    //SECOND: When this piece has been clicked, I need to show users
+    //SECOND: When this piece has been clicked or hovered over, I need to show users
     //where they can possibly go-for all child divs, check if move is legit-
     //if legit, show yellow, if not, show red, if piece taking chance orange
     //Fifth: If occupied by friendly, I must switch the piece.  If occupied
@@ -389,6 +406,10 @@ document.addEventListener("DOMContentLoaded", function(event){
     //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
     //Need to set up css changes to add to this-make square images of low opacity for highlights?  Stack them below piece images?
     //Create new piece images?  Argh!
+
+    //NEW TO DO:  MAKE IT SO THAT YOU CAN ONLY CAPTURE PIECES ON VALID MOVES
+    //Add the capture function to the move functions
+
     
     console.log(board[0].children);
     var board = document.getElementsByClassName("board");
@@ -412,19 +433,16 @@ document.addEventListener("DOMContentLoaded", function(event){
     localStorage.setItem("clickedpiece","none");
     for (let space of spaces){
         space.addEventListener('click', function(){
-            console.log(this.className);
-            console.log(this.getAttribute("color"));
-            console.log(this.innerHTML); 
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
                 console.log("pick another piece!")
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 localStorage.setItem("clickedpiece",this.className);
                 localStorage.setItem("oldcoords", this.id);
-                console.log(this.innerHTML.toString())
                 var html = this.innerHTML.toString();
-                console.log(html.slice(19,24));
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
-                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
+                localStorage.setItem("captured", "false");
+                console.log(localStorage.getItem("captured"))
+                toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")
@@ -433,13 +451,13 @@ document.addEventListener("DOMContentLoaded", function(event){
 
                 //I need to turn friendly fire off
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
-                console.log(this.className);
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
-                    console.log('butts');
                     turn += 1;
-                    capture(this.id, this.className, this.innerHTML.slice(19,24));
+                    //capture(this.id, this.className, this.innerHTML.slice(19,24));
                     localStorage.setItem("captured","true");
-                    toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"));
+                    //The move function needs to have a look taken at it.  the variables are set up incorrectly.
+                    toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));                    
+                    
                     localStorage.setItem("captured","false");
                     localStorage.setItem("clickedpiece","none");
                     localStorage.setItem("oldcoords", "none");
