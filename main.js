@@ -62,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.name = fullname;
         console.log(imagetext);
+        if(this.name.includes('king')){
+            alert("Game over!");
+            start();
+        }
         if(this.name.includes('black')){
             wcapturedPieces.push(this.name);
             localStorage.setItem('wcaptured', JSON.stringify(wcapturedPieces));
@@ -321,6 +325,8 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //Reorganize these into objects of objects
     function start(){
+        localStorage.clear();
+
         Bblack1 = new Bishop('13', 'black', 'Bblack1');
         Bblack2 = new Bishop('16', 'black', 'Bblack2');
         Kblack = new King('14', 'black', 'Kblack');
@@ -420,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //example movement: Pwhite7.move('77','67');
 
     //Flip a coin to decide who goes first
-    //Set localstorage value to equal the color?
+    //Set one of the two colors to have their turn on evens or odds
     //iterate turn count every time a piece is moved
 
     //Need to despawn stuff
@@ -455,16 +461,15 @@ document.addEventListener("DOMContentLoaded", function(event){
                     turn += 1;
                     //capture(this.id, this.className, this.innerHTML.slice(19,24));
                     localStorage.setItem("captured","true");
-                    //The move function needs to have a look taken at it.  the variables are set up incorrectly.
-                    toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));                    
-                    
+                    //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
+                    toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
                     localStorage.setItem("captured","false");
                     localStorage.setItem("clickedpiece","none");
                     localStorage.setItem("oldcoords", "none");
                 }else{
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
-                    alert('No friendly fire!');
+                    console.log('No friendly fire!');
                 }
                 
             }
