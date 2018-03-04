@@ -79,15 +79,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.name = fullname;
         console.log(imagetext);
-        if(this.name.includes('king')){
+        if(imagetext.includes('king')){
             alert("Game over!");
             start();
         }
+        //figure out if the names are being pushed to the capture list
         if(this.name.includes('black')){
             wcapturedPieces.push(this.name);
+            console.log(wcapturedPieces);
             localStorage.setItem('wcaptured', JSON.stringify(wcapturedPieces));
         }else{
             bcapturedPieces.push(this.name);
+            console.log(bcapturedPieces);
             localStorage.setItem('bcaptured', JSON.stringify(bcapturedPieces));
         }
         document.getElementById(this.spot).setAttribute('class','none');
