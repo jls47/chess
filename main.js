@@ -293,10 +293,10 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 0 || move[1] == 0) && captured == false){
+        if((move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }else if((move[0] == 0 || move[1] == 0) && captured == true){
+        }else if((move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
