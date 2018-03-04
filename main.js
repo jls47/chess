@@ -311,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Reorganize these into objects of objects
     function start(){
         localStorage.clear();
+        clear();
         //A fresh start. Replacing all the pieces and clearing localstorage.
         Bblack1 = new Bishop('13', 'black', 'Bblack1');
         Bblack2 = new Bishop('16', 'black', 'Bblack2');
