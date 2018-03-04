@@ -379,6 +379,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         wcapturedPieces = [];
         bcapturedPieces = [];
         turn = 0;
+        
+        //Establishing the clickedpiece variable.  This will contain a value to be used by this function that will determine what happens on mouseclicks.
+        localStorage.setItem("clickedpiece","none");
     }
 
     start();  
@@ -419,8 +422,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
 
-    //Establishing the clickedpiece variable.  This will contain a value to be used by this function that will determine what happens on mouseclicks.
-    localStorage.setItem("clickedpiece","none");
+    
     for (let space of spaces){
         //Adding Event listeners to every board space.
         space.addEventListener('click', function(){
