@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             let id = board[0].children[i].id;
             despawn(id);
         }
+        localStorage.clear();
     }
 
     //Placing the pieces on the board.  Place them by name, spot coordinates, and image name.
@@ -81,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         console.log(imagetext);
         if(imagetext.includes('king')){
             alert("Game over!");
+            clear();
             start();
         }
         //figure out if the names are being pushed to the capture list
@@ -299,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
+            console.log(move);
             alert('Cannot move there!');
         }
     }
