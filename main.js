@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             let id = board[0].children[i].id;
             despawn(id);
         }
+        localStorage.clear();
     }
 
     //Placing the pieces on the board.  Place them by name, spot coordinates, and image name.
@@ -79,15 +80,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.spot = spot;
         this.name = fullname;
         console.log(imagetext);
-        if(this.name.includes('king')){
+        if(imagetext.includes('king')){
             alert("Game over!");
+            clear();
             start();
         }
+        //figure out if the names are being pushed to the capture list
         if(this.name.includes('black')){
             wcapturedPieces.push(this.name);
+            console.log(wcapturedPieces);
             localStorage.setItem('wcaptured', JSON.stringify(wcapturedPieces));
         }else{
             bcapturedPieces.push(this.name);
+            console.log(bcapturedPieces);
             localStorage.setItem('bcaptured', JSON.stringify(bcapturedPieces));
         }
         document.getElementById(this.spot).setAttribute('class','none');
@@ -288,14 +293,15 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 0 || move[1] == 0) && captured == false){
+        if((move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
-        }else if((move[0] == 0 || move[1] == 0) && captured == true){
+        }else if((move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
         }else{
+            console.log(move);
             alert('Cannot move there!');
         }
     }
@@ -305,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Reorganize these into objects of objects
     function start(){
         localStorage.clear();
+        clear();
         //A fresh start. Replacing all the pieces and clearing localstorage.
         Bblack1 = new Bishop('13', 'black', 'Bblack1');
         Bblack2 = new Bishop('16', 'black', 'Bblack2');
@@ -379,6 +386,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         wcapturedPieces = [];
         bcapturedPieces = [];
         turn = 0;
+        
+        //Establishing the clickedpiece variable.  This will contain a value to be used by this function that will determine what happens on mouseclicks.
+        localStorage.setItem("clickedpiece","none");
     }
 
     start();  
@@ -419,8 +429,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
 
-    //Establishing the clickedpiece variable.  This will contain a value to be used by this function that will determine what happens on mouseclicks.
-    localStorage.setItem("clickedpiece","none");
+    
     for (let space of spaces){
         //Adding Event listeners to every board space.
         space.addEventListener('click', function(){
