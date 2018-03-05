@@ -83,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function(event){
         if(imagetext.includes('king')){
             alert("Game over!");
             clear();
-            start();
         }
         //figure out if the names are being pushed to the capture list
         if(this.name.includes('black')){
