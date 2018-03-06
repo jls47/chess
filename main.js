@@ -120,10 +120,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         if(move[0] == move[1] && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if(move[0] == move[1] && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             alert('Cannot move there!');   
         };
@@ -149,9 +151,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
+            turn += 1;
             despawn(coords);
         }else{
             alert("Cannot move there!");
@@ -178,10 +182,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords); 
+            turn += 1;
         }else{
             alert("Cannot move there!");
         }
@@ -212,15 +218,18 @@ document.addEventListener("DOMContentLoaded", function(event){
                 console.log('buzz');
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == -1 && move[1] == 0) && captured == 'true'){
                 alert("Can't capture that!")
             }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == -1 && amove[1] == 1) && captured == "true"){
                 capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else{
                 console.log(move[0] + ' ' + move[1] + ' ' + captured);
                 alert('Cannot move there!')
@@ -229,15 +238,18 @@ document.addEventListener("DOMContentLoaded", function(event){
             if(move[0] == 1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == 1 && move[1] == 0) && captured == 'true'){
                 alert("Can't capture that!")
             }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == 1 && amove[1] == 1) && captured == "true"){
                 capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else{
                 alert('Cannot move there!')
             }
@@ -266,10 +278,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             alert("Cannot move there!");
         }
@@ -295,10 +309,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             console.log(move);
             alert('Cannot move there!');
@@ -450,12 +466,12 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")             
-                turn += 1;
+        
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
-                    turn += 1;
+                    
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
                     toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
