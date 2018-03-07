@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     var Bwhite1, Bwhite2, Kwhite, Knwhite1, Knwhite2, Pwhite1, Pwhite2, Pwhite3, Pwhite4, Pwhite5, Pwhite6, Pwhite7, Pwhite8, Qwhite, Rwhite1, Rwhite2;
 
     var turn, bcapturedPieces, wcapturedPieces;
+
+    let spaces = document.querySelectorAll("[space = 'true']");
     
     //Styling the board.  Choosing white and light blue for the time being.
     var c1 = 'white';
@@ -132,7 +134,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     Bishop.prototype.guide = function(coords){
+        for(let space of spaces){
 
+        }
     }
 
     function King(spot, color, name){
@@ -167,7 +171,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     King.prototype.guide = function(coords){
-        
+        for(let space of spaces){
+            
+        }
     }
 
     function Knight(spot, color, name){
@@ -201,8 +207,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
+    //not working.  need to fix
     Knight.prototype.guide = function(coords){
-
+        this.coords = coords.split("");
+        for(let space of spaces){
+            console.log(space.id);
+            let newspot = space.id.split("");
+            let move = matrixSub(coords, newspot);
+            if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
+                console.log('bees');
+                document.getElementById(space.id).style.background == "orange";
+            }
+        }
     }
 
     function Pawn(spot, color, name){
@@ -269,7 +285,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     Pawn.prototype.guide = function(coords){
-
+        for(let space of spaces){
+            
+        }
     }
 
     function Queen(spot, color, name){
@@ -305,7 +323,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     Queen.prototype.guide = function(coords){
-
+        for(let space of spaces){
+            
+        }
     }
 
     function Rook(spot, color, name){
@@ -341,7 +361,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     Rook.prototype.guide = function(coords){
-        
+        for(let space of spaces){
+            
+        }
     }
 
     //Reorganize these into objects of objects
@@ -451,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     
     console.log(board[0].children);
     board = document.getElementsByClassName("board");
-    let spaces = document.querySelectorAll("[space = 'true']");
+    //let spaces = document.querySelectorAll("[space = 'true']");
     console.log(spaces);
 
     
@@ -478,6 +500,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 if((turn % 2 == 0 && this.className.includes("b")) || (turn % 2 != 0 && this.className.includes("w"))){
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
+                    toPiece[this.className].guide(this.id);
                 }else{
                     alert("Not your turn!");
                 }
