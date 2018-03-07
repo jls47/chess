@@ -123,11 +123,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
         var amove = pawnMatrixSub(coords, newspot);
-        if(move[0] == move[1] && captured == 'false'){
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if(move[0] == move[1] && captured == 'true'){
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -170,17 +170,17 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'false'){
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'true'){
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
-            turn += 1;
             despawn(coords);
+            turn += 1;
         }else{
-            alert("Cannot move there!");
+            alert('Cannot move there!');   
         };
     }
 
@@ -216,18 +216,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'false'){
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'true'){
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
-            despawn(coords); 
+            despawn(coords);
             turn += 1;
         }else{
-            alert("Cannot move there!");
-        }
+            alert('Cannot move there!');   
+        };
     }
 
     //not working.  need to fix
@@ -266,47 +266,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         var amove = matrixSub(coords, newspot);
         var move = pawnMatrixSub(coords, newspot);
 
-        if(this.piecename.includes('b')){
-            if((move[0] == -1 && move[1] == 0) && captured == "false"){
-                console.log('buzz');
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else if((move[0] == -1 && move[1] == 0) && captured == 'true'){
-                alert("Can't capture that!")
-            }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else if((move[0] == -1 && amove[1] == 1) && captured == "true"){
-                capture(newspot, fullname, imagetext);
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else{
-                console.log(move[0] + ' ' + move[1] + ' ' + captured);
-                alert('Cannot move there!')
-            }
-        }else if(this.piecename.includes('w')){
-            if(move[0] == 1 && move[1] == 0){
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else if((move[0] == 1 && move[1] == 0) && captured == 'true'){
-                alert("Can't capture that!")
-            }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else if((move[0] == 1 && amove[1] == 1) && captured == "true"){
-                capture(newspot, fullname, imagetext);
-                placement(this.fullname, this.piecename, newspot, this.color);
-                despawn(coords);
-                turn += 1;
-            }else{
-                alert('Cannot move there!')
-            }
-        }
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
+            turn += 1;
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+            capture(newspot, fullname, imagetext);
+            placement(this.fullname, this.piecename, newspot, this.color);
+            despawn(coords);
+            turn += 1;
+        }else{
+            alert('Cannot move there!');   
+        };
     }
 
     Pawn.prototype.guide = function(coords, name){
@@ -359,18 +330,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'false'){
+        var amove = pawnMatrixSub(coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'true'){
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
         }else{
-            alert("Cannot move there!");
-        }
+            alert('Cannot move there!');   
+        };
     }
 
     Queen.prototype.guide = function(coords, name){
@@ -405,19 +377,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
-        if((move[0] == 0 || move[1] == 0) && captured == 'false'){
+        var amove = pawnMatrixSub(coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((move[0] == 0 || move[1] == 0) && captured == 'true'){
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
         }else{
-            console.log(move);
-            alert('Cannot move there!');
-        }
+            alert('Cannot move there!');   
+        };
     }
 
     Rook.prototype.guide = function(coords, name){
