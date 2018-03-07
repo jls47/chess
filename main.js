@@ -558,6 +558,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 if((turn % 2 == 0 && this.className.includes("b")) || (turn % 2 != 0 && this.className.includes("w"))){
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
+                    color();
                     toPiece[this.className].guide(this.id, this.className);
                 }else{
                     alert("Not your turn!");
@@ -566,10 +567,11 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
                 localStorage.setItem("captured", "false");
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
+                color();
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")             
-        
+                
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
                 //If the new space has a piece that is a different color, then capturing will occur.  
@@ -578,6 +580,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
                     toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
+                    color();
                     localStorage.setItem("captured","false");
                     localStorage.setItem("clickedpiece","none");
                     localStorage.setItem("oldcoords", "none");
@@ -585,6 +588,8 @@ document.addEventListener("DOMContentLoaded", function(event){
                     //If it's just a different piece of the same team, you switch to moving that piece.
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
+                    color();
+                    toPiece[this.className].guide(this.id, this.className);
                     console.log('No friendly fire!');
                 }
                 
