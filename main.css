@@ -10,7 +10,10 @@
     width: 11%;
     height: 11%;
     display: inline-block;
-    background: white;
+}
+
+div[possible="true"]{
+    background: orange;
 }
 
 img{

@@ -36,20 +36,23 @@ document.addEventListener("DOMContentLoaded", function(event){
     var c2 = 'lightblue';
     var tmp = '';
     var board = document.getElementsByClassName("board");
-    //For each of the children on the board, iterate through white and the other color.  When the end of the board is reached, switch.  
-    for(var i = 0; i < board[0].children.length; i++){
-        var id = board[0].children[i].id;
-        if(i % 2 == 0){
-            document.getElementById(id).style.background = c2;
-        }else{
-            document.getElementById(id).style.background = c1;
-        }
-        if(i >= 1 && (i+1) % 8 == 0){
-            tmp = c1;
-            c1 = c2;
-            c2 = tmp;
+    //For each of the children on the board, iterate through white and the other color.  When the end of the board is reached, switch.
+    function color(){
+        for(var i = 0; i < board[0].children.length; i++){
+            var id = board[0].children[i].id;
+            if(i % 2 == 0){
+                document.getElementById(id).style.background = c2;
+            }else{
+                document.getElementById(id).style.background = c1;
+            }
+            if(i >= 1 && (i+1) % 8 == 0){
+                tmp = c1;
+                c1 = c2;
+                c2 = tmp;
+            }
         }
     }
+    color();
 
     //make the clearing function mostly only apply to the middle parts!  It's making the regular bits not clickable!
 
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         document.getElementById(this.spot).innerHTML = '';
     }
 
-    //TO DO: OPTIMIZE OPTIMIZE OPTIMIZE!!!!!!
+    //TO DO: MAKE PIECES UNABLE TO JUMP
         
     function Bishop(spot, color, name){
         this.color = color;
@@ -119,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = matrixSub(coords, newspot);
+        var amove = pawnMatrixSub(coords, newspot);
         if(move[0] == move[1] && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -133,9 +137,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         };
     }
 
-    Bishop.prototype.guide = function(coords){
+    Bishop.prototype.guide = function(coords, name){
+        this.coords = coords.split("");
         for(let space of spaces){
+            let newspot = space.id.split("");
+            let move = matrixSub(coords, newspot);
+            if((move[0] == move[1])){
+                console.log(space);
 
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }
         }
     }
 
@@ -170,9 +184,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         };
     }
 
-    King.prototype.guide = function(coords){
+    King.prototype.guide = function(coords, name){
+        this.coords = coords.split("");
         for(let space of spaces){
-            
+            let newspot = space.id.split("");
+            let move = matrixSub(coords, newspot);
+            if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
+                console.log(space);
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }
         }
     }
 
@@ -208,15 +231,17 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     //not working.  need to fix
-    Knight.prototype.guide = function(coords){
+    Knight.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
-            console.log(space.id);
             let newspot = space.id.split("");
             let move = matrixSub(coords, newspot);
             if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
-                console.log('bees');
-                document.getElementById(space.id).style.background == "orange";
+                console.log(space);
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
             }
         }
     }
@@ -284,9 +309,35 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    Pawn.prototype.guide = function(coords){
+    Pawn.prototype.guide = function(coords, name){
+        this.coords = coords.split("");
         for(let space of spaces){
-            
+            let newspot = space.id.split("");
+            var amove = matrixSub(this.coords, newspot);
+            var move = pawnMatrixSub(this.coords, newspot);
+            if(name.includes('b')){
+                if((move[0] == -1 && move[1] == 0)){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }else if(name.includes('w')){
+                if((move[0] == 1 && move[1] == 0)){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }
         }
     }
 
@@ -322,9 +373,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    Queen.prototype.guide = function(coords){
+    Queen.prototype.guide = function(coords, name){
+        this.coords = coords.split("");
         for(let space of spaces){
-            
+            let newspot = space.id.split("");
+            let move = matrixSub(coords, newspot);
+            if((move[0] == move[1] || move[0] == 0 || move[1] == 0)){
+                console.log(space.className + " " + name);
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }
         }
     }
 
@@ -360,9 +420,18 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     }
 
-    Rook.prototype.guide = function(coords){
+    Rook.prototype.guide = function(coords, name){
+        this.coords = coords.split("");
         for(let space of spaces){
-            
+            let newspot = space.id.split("");
+            let move = matrixSub(coords, newspot);
+            if((move[0] == 0 || move[1] == 0)){
+                console.log(space);
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    document.getElementById(space.id).setAttribute("possible","true");
+                    document.getElementById(space.id).style.background = "orange";
+                }
+            }
         }
     }
 
@@ -456,26 +525,16 @@ document.addEventListener("DOMContentLoaded", function(event){
         start();
     })
 
-    //TO MOVE, HERE IS WHAT NEEDS TO HAPPEN
-    //SECOND: When this piece has been clicked or hovered over, I need to show users
-    //where they can possibly go-for all child divs, check if move is legit-
-    //if legit, show yellow, if not, show red, if capturing can happen hit orange
-    //Fifth: If occupied by friendly, I must switch the piece.  If occupied
-    //by foe, I must remove that piece and place it in the bin.
-    //Sixth: I must update the css to display changes.
-
     //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
     //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
 
     //NEW TO DO:  MAKE IT SO THAT YOU CAN ONLY CAPTURE PIECES ON VALID MOVES
     //Add the capture function to the move functions
-
     
     console.log(board[0].children);
     board = document.getElementsByClassName("board");
     //let spaces = document.querySelectorAll("[space = 'true']");
     console.log(spaces);
-
     
     //example movement: Pwhite7.move('77','67');
 
@@ -484,11 +543,10 @@ document.addEventListener("DOMContentLoaded", function(event){
     //iterate turn count every time a piece is moved
 
     //Need to despawn stuff
-
-
-
     
     for (let space of spaces){
+        //This is for the highlighting function.
+        document.getElementById(space.id).setAttribute("possible","false");
         //Adding Event listeners to every board space.
         space.addEventListener('click', function(){
             //If no piece has been selected and the space is empty, nothing happens.
@@ -500,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 if((turn % 2 == 0 && this.className.includes("b")) || (turn % 2 != 0 && this.className.includes("w"))){
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
-                    toPiece[this.className].guide(this.id);
+                    toPiece[this.className].guide(this.id, this.className);
                 }else{
                     alert("Not your turn!");
                 }
@@ -534,17 +592,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
         });
     }
-    //not sure if this is useful.
-    var resetspacecolor = function(oldstyle, coords){
-        document.getElementById(coords).style.background = oldstyle;
-    }
 
-    //NEXT UP: ATTACKING, TURNS, SPECIAL RULES
-
-
-    
-
-    
-
+    //NEXT UP: SPECIAL RULES
 
 })
