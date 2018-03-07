@@ -120,13 +120,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         if(move[0] == move[1] && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if(move[0] == move[1] && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             alert('Cannot move there!');   
         };
+    }
+
+    Bishop.prototype.guide = function(coords){
+
     }
 
     function King(spot, color, name){
@@ -149,13 +155,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
+            turn += 1;
             despawn(coords);
         }else{
             alert("Cannot move there!");
         };
+    }
+
+    King.prototype.guide = function(coords){
+        
     }
 
     function Knight(spot, color, name){
@@ -178,13 +190,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords); 
+            turn += 1;
         }else{
             alert("Cannot move there!");
         }
+    }
+
+    Knight.prototype.guide = function(coords){
+
     }
 
     function Pawn(spot, color, name){
@@ -212,15 +230,18 @@ document.addEventListener("DOMContentLoaded", function(event){
                 console.log('buzz');
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == -1 && move[1] == 0) && captured == 'true'){
                 alert("Can't capture that!")
             }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == -1 && amove[1] == 1) && captured == "true"){
                 capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else{
                 console.log(move[0] + ' ' + move[1] + ' ' + captured);
                 alert('Cannot move there!')
@@ -229,21 +250,27 @@ document.addEventListener("DOMContentLoaded", function(event){
             if(move[0] == 1 && move[1] == 0){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == 1 && move[1] == 0) && captured == 'true'){
                 alert("Can't capture that!")
             }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else if((move[0] == 1 && amove[1] == 1) && captured == "true"){
                 capture(newspot, fullname, imagetext);
                 placement(this.fullname, this.piecename, newspot, this.color);
                 despawn(coords);
+                turn += 1;
             }else{
                 alert('Cannot move there!')
             }
         }
     }
 
+    Pawn.prototype.guide = function(coords){
+
+    }
 
     function Queen(spot, color, name){
         this.color = color;
@@ -266,13 +293,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == move[1] || move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             alert("Cannot move there!");
         }
+    }
+
+    Queen.prototype.guide = function(coords){
+
     }
 
     function Rook(spot, color, name){
@@ -295,17 +328,21 @@ document.addEventListener("DOMContentLoaded", function(event){
         if((move[0] == 0 || move[1] == 0) && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else if((move[0] == 0 || move[1] == 0) && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
+            turn += 1;
         }else{
             console.log(move);
             alert('Cannot move there!');
         }
     }
 
-    
+    Rook.prototype.guide = function(coords){
+        
+    }
 
     //Reorganize these into objects of objects
     function start(){
@@ -437,6 +474,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 console.log("pick another piece!")
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
+                //Here I need to introduce the colored spaces thing.  Create a new function for it.
                 if((turn % 2 == 0 && this.className.includes("b")) || (turn % 2 != 0 && this.className.includes("w"))){
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
@@ -450,12 +488,12 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
                 localStorage.setItem("color","none")             
-                turn += 1;
+        
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
-                    turn += 1;
+                    
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
                     toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
