@@ -20,6 +20,10 @@ var pawnMatrixSub = function(first, last){
     return move;
 }
 
+//Start restructuring.  You can have one universal movement function dependent upon different guide functions.
+//Start writing the guide functions to incorporate matrix math.
+//In the guide functions, add the possible spots.  Add conditions.  If there is a break in the possibles, depending on the color, cut off the possibles after a certain point.
+
 //When the board has loaded, we can begin.
 document.addEventListener("DOMContentLoaded", function(event){
     //First, I establish the piece names.
