@@ -1,18 +1,17 @@
 
 
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
-var matrixSub = function(first, last){
+var absMatSub = function(first, last){
     var move = [];
     for(var i = 0; i < 2; i++){
-
         move.push(Math.abs(first[i]-last[i]));
-
     }
     return move;
 }
 
 //Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
-var pawnMatrixSub = function(first, last){
+//This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
+var regMatSub = function(first, last){
     var move = [];
     for(var i = 0; i < 2; i++){
         move.push(first[i]-last[i]);
@@ -20,9 +19,12 @@ var pawnMatrixSub = function(first, last){
     return move;
 }
 
+/////////////////////////////////////////////////////////////////////
 //Start restructuring.  You can have one universal movement function dependent upon different guide functions.
 //Start writing the guide functions to incorporate matrix math.
-//In the guide functions, add the possible spots.  Add conditions.  If there is a break in the possibles, depending on the color, cut off the possibles after a certain point.
+//In the guide functions, add the possible spots.  Add conditions.  If there is a break in the possibles, depending on the color (directionality), 
+//cut off the possibles after a certain point.  This is the real reason for the regular matrix math.
+/////////////////////////////////////////////////////////////////////
 
 //When the board has loaded, we can begin.
 document.addEventListener("DOMContentLoaded", function(event){
@@ -107,6 +109,25 @@ document.addEventListener("DOMContentLoaded", function(event){
         document.getElementById(this.spot).innerHTML = '';
     }
 
+    function move(coords, newspot, color, captured, fullname, imagetext){
+        this.coords = coords.split("");
+        this.newspot = newspot.split("");
+        var move = absMatSub(coords, newspot);
+        var amove = regMatSub(coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+            placement(fullname, imagetext, newspot, color);
+            despawn(coords);
+            turn += 1;
+        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+            capture(newspot, fullname, imagetext);
+            placement(fullname, imagetext, newspot, color);
+            despawn(coords);
+            turn += 1;
+        }else{
+            alert('Cannot move there!');   
+        };
+    }
+
     //TO DO: MAKE PIECES UNABLE TO JUMP
         
     function Bishop(spot, color, name){
@@ -125,8 +146,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixSub(coords, newspot);
-        var amove = pawnMatrixSub(coords, newspot);
+        var move = absMatSub(coords, newspot);
+        var amove = regMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -145,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = matrixSub(coords, newspot);
+            let move = absMatSub(coords, newspot);
             if((move[0] == move[1])){
                 console.log(space);
 
@@ -173,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixSub(coords, newspot);
+        var move = absMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -192,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = matrixSub(coords, newspot);
+            let move = absMatSub(coords, newspot);
             if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -219,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixSub(coords, newspot);
+        var move = absMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -239,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = matrixSub(coords, newspot);
+            let move = absMatSub(coords, newspot);
             if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -267,8 +288,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var amove = matrixSub(coords, newspot);
-        var move = pawnMatrixSub(coords, newspot);
+        var amove = absMatSub(coords, newspot);
+        var move = regMatSub(coords, newspot);
 
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -288,8 +309,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            var amove = matrixSub(this.coords, newspot);
-            var move = pawnMatrixSub(this.coords, newspot);
+            var amove = absMatSub(this.coords, newspot);
+            var move = regMatSub(this.coords, newspot);
             if(name.includes('b')){
                 if((move[0] == -1 && move[1] == 0)){
                     document.getElementById(space.id).setAttribute("possible","true");
@@ -333,8 +354,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixSub(coords, newspot);
-        var amove = pawnMatrixSub(coords, newspot);
+        var move = absMatSub(coords, newspot);
+        var amove = regMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -353,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = matrixSub(coords, newspot);
+            let move = absMatSub(coords, newspot);
             if((move[0] == move[1] || move[0] == 0 || move[1] == 0)){
                 console.log(space.className + " " + name);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -380,8 +401,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matrixSub(coords, newspot);
-        var amove = pawnMatrixSub(coords, newspot);
+        var move = absMatSub(coords, newspot);
+        var amove = regMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -400,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = matrixSub(coords, newspot);
+            let move = absMatSub(coords, newspot);
             if((move[0] == 0 || move[1] == 0)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -518,8 +539,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Set one of the two colors to have their turn on evens or odds
     //iterate turn count every time a piece is moved
 
-    //Need to despawn stuff
     
+
     for (let space of spaces){
         //This is for the highlighting function.
         document.getElementById(space.id).setAttribute("possible","false");
@@ -540,8 +561,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                     alert("Not your turn!");
                 }
             //If a piece has been selected and the space is empty (move legitimacy is checked elsewhere), the piece will be moved there and the turn count will be increased.
+            //Should I restructure the whole thing?  How?
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
                 localStorage.setItem("captured", "false");
+                
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
                 color();
                 localStorage.setItem("clickedpiece","none");
