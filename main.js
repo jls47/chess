@@ -180,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //The conditions will vary piece by piece.  Bishops, for example: up to four arrays possible.  If one value - other != [1,1] then they get into separate arrays.  
     //Relationships between arrayed values need to work like that.  Find a value in another array where the difference is [1,1] and that is the array it belongs to?
     //If the values do not equal either 8 or 1 and there's a break then something.  Shit.  write more.
+    //Add the values that are on white spaces to their own array too?  See if they line up, then remove the one furthest from the piece with matrix math
 
     Bishop.prototype.guide = function(coords, name){
         this.coords = coords.split("");
