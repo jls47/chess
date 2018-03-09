@@ -176,6 +176,11 @@ document.addEventListener("DOMContentLoaded", function(event){
     //other in another.  If there is a break, the ones closest to the piece (test with matrices) needs 
     //to be the only legit ones.
 
+    //The search for lines can radiate outward from the piece.  Start going up towards 88 and down towards 11.  Loop through the ids, stopping at 0 and subtracting 2.
+    //The conditions will vary piece by piece.  Bishops, for example: up to four arrays possible.  If one value - other != [1,1] then they get into separate arrays.  
+    //Relationships between arrayed values need to work like that.  Find a value in another array where the difference is [1,1] and that is the array it belongs to?
+    //If the values do not equal either 8 or 1 and there's a break then something.  Shit.  write more.
+
     Bishop.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
@@ -183,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function(event){
             let move = absMatSub(coords, newspot);
             if((move[0] == move[1])){
                 console.log(space);
-
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
