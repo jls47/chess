@@ -115,12 +115,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         var move = absMatSub(coords, newspot);
         var amove = regMatSub(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
-            placement(fullname, imagetext, newspot, color);
+            placement(fullname, imagetext, newspot);
             despawn(coords);
             turn += 1;
         }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
-            placement(fullname, imagetext, newspot, color);
+            placement(fullname, imagetext, newspot);
             despawn(coords);
             turn += 1;
         }else{
@@ -305,6 +305,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         };
     }
 
+    //Pawns can still attack forwards.  Need need NEED TO FIX THIS
+
     Pawn.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
@@ -312,10 +314,10 @@ document.addEventListener("DOMContentLoaded", function(event){
             var amove = absMatSub(this.coords, newspot);
             var move = regMatSub(this.coords, newspot);
             if(name.includes('b')){
-                if((move[0] == -1 && move[1] == 0)){
+                if((move[0] == -1 && move[1] == 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if((move[0] == -2 && move[1] == 0) && coords[0] == 2){
+                }else if(((move[0] == -2 && move[1] == 0) && coords[0] == 2) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
@@ -323,10 +325,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).style.background = "orange";
                 }
             }else if(name.includes('w')){
-                if((move[0] == 1 && move[1] == 0)){
+                if((move[0] == 1 && move[1] == 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if((move[0] == 2 && move[1] == 0) && coords[0] == 7){
+                }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 7) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
@@ -572,7 +574,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("color","none")             
                 
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
-            }else if((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className){
+            }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true"){
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
                     
