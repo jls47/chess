@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.src = './assets/' + this.name + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
         document.getElementById(this.spot).setAttribute('class', fullname);
-        resetPossibles();
+        //resetPossibles();
     }
 
     function resetPossibles(){
@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
+            resetPossibles();
         };
     }
 
@@ -212,7 +213,8 @@ document.addEventListener("DOMContentLoaded", function(event){
             despawn(coords);
             turn += 1;
         }else{
-            alert('Cannot move there!');   
+            alert('Cannot move there!'); 
+            resetPossibles();  
         };
     }
 
@@ -259,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
+            resetPossibles();
         };
     }
 
@@ -310,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
+            resetPossibles();
         };
     }
 
@@ -377,6 +381,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
+            resetPossibles();
         };
     }
 
@@ -424,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
+            resetPossibles();
         };
     }
 
@@ -538,10 +544,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     //NEW TO DO:  MAKE IT SO THAT YOU CAN ONLY CAPTURE PIECES ON VALID MOVES
     //Add the capture function to the move functions
     
-    console.log(board[0].children);
     board = document.getElementsByClassName("board");
     //let spaces = document.querySelectorAll("[space = 'true']");
-    console.log(spaces);
+    
     
     //example movement: Pwhite7.move('77','67');
 
@@ -558,7 +563,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         space.addEventListener('click', function(){
             //If no piece has been selected and the space is empty, nothing happens.
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
-                console.log("pick another piece!")
+                console.log("Pick a piece!")
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 //Here I need to introduce the colored spaces thing.  Create a new function for it.
@@ -574,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             //Should I restructure the whole thing?  How?
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
                 localStorage.setItem("captured", "false");
-                
+                console.log('clicked piece to empty space')
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
                 color();
                 localStorage.setItem("clickedpiece","none");
@@ -584,8 +589,9 @@ document.addEventListener("DOMContentLoaded", function(event){
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
             }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true"){
                 //If the new space has a piece that is a different color, then capturing will occur.  
+                
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
-                    
+                    console.log('clicked piece to capture')
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
                     toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
@@ -595,6 +601,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     localStorage.setItem("oldcoords", "none");
                 }else{
                     //If it's just a different piece of the same team, you switch to moving that piece.
+                    console.log('clicked piece switching to other clicked piece')
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
                     color();
@@ -602,6 +609,13 @@ document.addEventListener("DOMContentLoaded", function(event){
                     console.log('No friendly fire!');
                 }
                 
+            }else if(((localStorage.getItem("clickedpiece").includes("b") && this.className.includes("b")) || (localStorage.getItem("clickedpiece").includes("w") && this.className.includes("w")))){
+                //If it's just a different piece of the same team, you switch to moving that piece.
+                console.log('clicked piece switching to other clicked piece')
+                localStorage.setItem("clickedpiece",this.className);
+                localStorage.setItem("oldcoords", this.id);
+                color();
+                toPiece[this.className].guide(this.id, this.className);
             }
 
         });
