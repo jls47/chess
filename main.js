@@ -170,6 +170,12 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
 
+    //In each of these guide functions, I need to somehow put the possibles into an array or two and test for uniformity
+    //or breakage in the line.  There will need to be multiple arrays-test where the values go with matrix math?
+    //If there is a difference in the matrices of more than one, one matrix needs to go in one array and the
+    //other in another.  If there is a break, the ones closest to the piece (test with matrices) needs 
+    //to be the only legit ones.
+
     Bishop.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
