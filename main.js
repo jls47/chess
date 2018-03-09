@@ -7,7 +7,7 @@ var absMatSub = function(first, last){
         move.push(Math.abs(first[i]-last[i]));
     }
     return move;
-}
+};
 
 //Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
 //This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
@@ -17,7 +17,7 @@ var regMatSub = function(first, last){
         move.push(first[i]-last[i]);
     }
     return move;
-}
+};
 
 /////////////////////////////////////////////////////////////////////
 //Start restructuring.  You can have one universal movement function dependent upon different guide functions.
@@ -46,12 +46,12 @@ document.addEventListener("DOMContentLoaded", function(event){
     function color(){
         for(var i = 0; i < board[0].children.length; i++){
             var id = board[0].children[i].id;
-            if(i % 2 == 0){
+            if(i % 2 === 0){
                 document.getElementById(id).style.background = c2;
             }else{
                 document.getElementById(id).style.background = c1;
             }
-            if(i >= 1 && (i+1) % 8 == 0){
+            if(i >= 1 && (i+1) % 8 === 0){
                 tmp = c1;
                 c1 = c2;
                 c2 = tmp;
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             turn += 1;
         }else{
             alert('Cannot move there!');   
-        };
+        }
     }
 
     //TO DO: MAKE PIECES UNABLE TO JUMP
@@ -167,8 +167,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!');   
             resetPossibles();
-        };
-    }
+        }
+    };
 
     Bishop.prototype.guide = function(coords, name){
         this.coords = coords.split("");
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     function King(spot, color, name){
         this.color = color;
@@ -215,15 +215,15 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!'); 
             resetPossibles();  
-        };
-    }
+        }
+    };
 
     King.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
             let move = absMatSub(coords, newspot);
-            if((move[0] == 0 && move[1] == 1) || (move[0] == 1 && move[1] == 0)){
+            if((move[0] === 0 && move[1] == 1) || (move[0] == 1 && move[1] === 0)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
                     document.getElementById(space.id).setAttribute("possible","true");
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     function Knight(spot, color, name){
         this.color = color;
@@ -262,8 +262,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!');   
             resetPossibles();
-        };
-    }
+        }
+    };
 
     //not working.  need to fix
     Knight.prototype.guide = function(coords, name){
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     function Pawn(spot, color, name){
         this.color = color;
@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-            resetPossibles
+            resetPossibles();
         }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -314,8 +314,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!');   
             resetPossibles();
-        };
-    }
+        }
+    };
 
     //Pawns can still attack forwards.  Need need NEED TO FIX THIS
 
@@ -326,10 +326,10 @@ document.addEventListener("DOMContentLoaded", function(event){
             var amove = absMatSub(this.coords, newspot);
             var move = regMatSub(this.coords, newspot);
             if(name.includes('b')){
-                if((move[0] == -1 && move[1] == 0) && space.className.includes("none")){
+                if((move[0] == -1 && move[1] === 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == -2 && move[1] == 0) && coords[0] == 2) && space.className == "none"){
+                }else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none"){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
@@ -337,10 +337,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).style.background = "orange";
                 }
             }else if(name.includes('w')){
-                if((move[0] == 1 && move[1] == 0) && space.className.includes("none")){
+                if((move[0] == 1 && move[1] === 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 7) && space.className == "none"){
+                }else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none"){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
@@ -349,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     function Queen(spot, color, name){
         this.color = color;
@@ -382,15 +382,15 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!');   
             resetPossibles();
-        };
-    }
+        }
+    };
 
     Queen.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
             let move = absMatSub(coords, newspot);
-            if((move[0] == move[1] || move[0] == 0 || move[1] == 0)){
+            if((move[0] === move[1] || move[0] === 0 || move[1] === 0)){
                 console.log(space.className + " " + name);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
                     document.getElementById(space.id).setAttribute("possible","true");
@@ -398,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     function Rook(spot, color, name){
         this.color = color;
@@ -430,15 +430,15 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             alert('Cannot move there!');   
             resetPossibles();
-        };
-    }
+        }
+    };
 
     Rook.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
             let move = absMatSub(coords, newspot);
-            if((move[0] == 0 || move[1] == 0)){
+            if((move[0] === 0 || move[1] === 0)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
                     document.getElementById(space.id).setAttribute("possible","true");
@@ -446,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 }
             }
         }
-    }
+    };
 
     //Reorganize these into objects of objects
     function start(){
@@ -522,7 +522,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             'Qwhite': Qwhite,
             'Rwhite1': Rwhite1,
             'Rwhite2': Rwhite2,
-        }
+        };
         wcapturedPieces = [];
         bcapturedPieces = [];
         turn = 0;
@@ -536,7 +536,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     document.getElementById('reset').addEventListener('click', function(){
         clear();
         start();
-    })
+    });
 
     //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
     //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
@@ -563,11 +563,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         space.addEventListener('click', function(){
             //If no piece has been selected and the space is empty, nothing happens.
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
-                console.log("Pick a piece!")
+                console.log("Pick a piece!");
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
             }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
                 //Here I need to introduce the colored spaces thing.  Create a new function for it.
-                if((turn % 2 == 0 && this.className.includes("b")) || (turn % 2 != 0 && this.className.includes("w"))){
+                if((turn % 2 === 0 && this.className.includes("b")) || (turn % 2 !== 0 && this.className.includes("w"))){
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
                     color();
@@ -579,19 +579,19 @@ document.addEventListener("DOMContentLoaded", function(event){
             //Should I restructure the whole thing?  How?
             }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
                 localStorage.setItem("captured", "false");
-                console.log('clicked piece to empty space')
+                console.log('clicked piece to empty space');
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
                 color();
                 localStorage.setItem("clickedpiece","none");
                 localStorage.setItem("oldcoords", "none");
-                localStorage.setItem("color","none")             
+                localStorage.setItem("color","none");             
                 
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
             }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true"){
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 
                 if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
-                    console.log('clicked piece to capture')
+                    console.log('clicked piece to capture');
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
                     toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24)); 
@@ -601,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     localStorage.setItem("oldcoords", "none");
                 }else{
                     //If it's just a different piece of the same team, you switch to moving that piece.
-                    console.log('clicked piece switching to other clicked piece')
+                    console.log('clicked piece switching to other clicked piece');
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
                     color();
@@ -611,7 +611,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 
             }else if(((localStorage.getItem("clickedpiece").includes("b") && this.className.includes("b")) || (localStorage.getItem("clickedpiece").includes("w") && this.className.includes("w")))){
                 //If it's just a different piece of the same team, you switch to moving that piece.
-                console.log('clicked piece switching to other clicked piece')
+                console.log('clicked piece switching to other clicked piece');
                 localStorage.setItem("clickedpiece",this.className);
                 localStorage.setItem("oldcoords", this.id);
                 color();
@@ -623,4 +623,4 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //NEXT UP: SPECIAL RULES
 
-})
+});
