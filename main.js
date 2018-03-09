@@ -77,6 +77,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.src = './assets/' + this.name + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
         document.getElementById(this.spot).setAttribute('class', fullname);
+        resetPossibles();
+    }
+
+    function resetPossibles(){
+        for(let space of spaces){
+            document.getElementById(space.id).setAttribute("possible","false");
+        }
     }
 
     //Removing pieces from where they were before they moved.
@@ -295,6 +302,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
+            resetPossibles
         }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -317,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 if((move[0] == -1 && move[1] == 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == -2 && move[1] == 0) && coords[0] == 2) && space.className.includes("none")){
+                }else if(((move[0] == -2 && move[1] == 0) && coords[0] == 2) && space.className == "none"){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
@@ -328,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 if((move[0] == 1 && move[1] == 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 7) && space.className.includes("none")){
+                }else if(((move[0] == 2 && move[1] == 0) && coords[0] == 7) && space.className == "none"){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
