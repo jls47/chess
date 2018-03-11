@@ -341,8 +341,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none"){
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+                    if(document.getElementById([(parseInt(newspot[0]) - 1),newspot[1]].join()).className == "none"){
+                        document.getElementById(space.id).setAttribute("possible","true");
+                        document.getElementById(space.id).style.background = "orange";
+                    }
                 }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
@@ -352,8 +354,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none"){
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+                    if(document.getElementById([(parseInt(newspot[0]) + 1),newspot[1]].join()).className == "none"){
+                        document.getElementById(space.id).setAttribute("possible","true");
+                        document.getElementById(space.id).style.background = "orange";
+                    }
                 }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
