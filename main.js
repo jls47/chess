@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             if((move[0] == move[1])){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -341,7 +342,8 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none"){
-                    if(document.getElementById([(parseInt(newspot[0]) - 1),newspot[1]].join()).className == "none"){
+                    console.log([(parseInt(newspot[0]) - 1) + newspot[1]].join());
+                    if(document.getElementById([(parseInt(newspot[0]) - 1)+ newspot[1]]).className == "none"){
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
@@ -354,7 +356,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none"){
-                    if(document.getElementById([(parseInt(newspot[0]) + 1),newspot[1]].join()).className == "none"){
+                    if(document.getElementById([(parseInt(newspot[0]) + 1)+ newspot[1]]).className == "none"){
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
@@ -577,6 +579,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         //Adding Event listeners to every board space.
         space.addEventListener('click', function(){
             //If no piece has been selected and the space is empty, nothing happens.
+            console.log(this.className);
             if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
                 console.log("Pick a piece!");
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
