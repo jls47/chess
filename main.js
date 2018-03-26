@@ -1,20 +1,27 @@
 
 
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
-var absMatSub = function(first, last){
+var absMatMath = function(first, last){
     var move = [];
     for(var i = 0; i < 2; i++){
         move.push(Math.abs(first[i]-last[i]));
     }
+   
     return move;
 };
 
 //Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
 //This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
-var regMatSub = function(first, last){
+var regMatMath = function(operation, first, last){
     var move = [];
-    for(var i = 0; i < 2; i++){
-        move.push(first[i]-last[i]);
+    if(operation == "subtract"){
+        for(var i = 0; i < 2; i++){
+            move.push(first[i]-last[i]);
+        }
+    }else if(operation == "add"){
+        for(var i = 0; i < 2; i++){
+            move.push(first[i] - last[i])
+        }
     }
     return move;
 };
@@ -119,8 +126,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     function move(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
-        var amove = regMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
+        var amove = regMatMath("ubtract",coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(fullname, imagetext, newspot);
             despawn(coords);
@@ -153,8 +160,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
-        var amove = regMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
+        var amove = regMatMath(subtract, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -186,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = absMatSub(coords, newspot);
+            let move = absMatMath(coords, newspot);
             if((move[0] == move[1])){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -214,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -234,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = absMatSub(coords, newspot);
+            let move = absMatMath(coords, newspot);
             if((move[0] === 0 && move[1] == 1) || (move[0] == 1 && move[1] === 0)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -261,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -282,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = absMatSub(coords, newspot);
+            let move = absMatMath(coords, newspot);
             if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
                 console.log(space);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -310,8 +317,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var amove = absMatSub(coords, newspot);
-        var move = regMatSub(coords, newspot);
+        var amove = absMatMath(coords, newspot);
+        var move = regMatMath("subtract", coords, newspot);
 
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -335,8 +342,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            var amove = absMatSub(this.coords, newspot);
-            var move = regMatSub(this.coords, newspot);
+            var amove = absMatMath(this.coords, newspot);
+            var move = regMatMath("subtract",this.coords, newspot);
             if(name.includes('b')){
                 if((move[0] == -1 && move[1] === 0) && space.className.includes("none")){
                     document.getElementById(space.id).setAttribute("possible","true");
@@ -385,8 +392,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
-        var amove = regMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
+        var amove = regMatMath("subtract", coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -406,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = absMatSub(coords, newspot);
+            let move = absMatMath(coords, newspot);
             if((move[0] === move[1] || move[0] === 0 || move[1] === 0)){
                 console.log(space.className + " " + name);
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
@@ -433,8 +440,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatSub(coords, newspot);
-        var amove = regMatSub(coords, newspot);
+        var move = absMatMath(coords, newspot);
+        var amove = regMatMath("subtract", coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -449,20 +456,100 @@ document.addEventListener("DOMContentLoaded", function(event){
             resetPossibles();
         }
     };
-
+    //guides need to radiate outwards from the piece
     Rook.prototype.guide = function(coords, name){
         this.coords = coords.split("");
+        let hlids = [];
+        let hrids = []
+        let vuids = [];
+        let vdids = [];
+        console.log(coords)
+        //up vertical guide
+        for(i = parseInt(coords[0])+1; i <= 8; i++){
+            let vuid = [i, coords[1]].join('')
+            console.log(vuid)
+            if(document.getElementById(vuid).className == "none"){
+                vuids.push(vuid)
+            }else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))){
+                vuids.push(vuid)
+                break
+            }else if(this.color == "black" && document.getElementById(vuid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+            
+        }
+        console.log(vuids+'vuids'); 
+        
+        //down vertical guide
+        for(i = parseInt(coords[0])-1; i >= 1; i--){
+            let vdid = [i, coords[1]].join('')
+            console.log(vuid)
+            if(document.getElementById(vdid).className == "none"){
+                vdids.push(vdid)
+            }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
+                vdids.push(vdid)
+                break
+            }else if(this.color == "black" && document.getElementById(vdid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            } 
+        }
+        console.log(vdids+'vdids'); 
+
+        //right horizontal guide
+        for(i = parseInt(coords[1])+1; i <= 8; i++){
+            
+            let hrid = [coords[0], i].join('')
+            console.log(hrid)
+            if(document.getElementById(hrid).className == "none"){
+                hrids.push(hrid)
+            }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
+                hrids.push(hrid)
+                break
+            }else if(this.color == "black" && document.getElementById(hrid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+        }
+        console.log(hrids + 'hrids');
+
+        //left horizontal guide
+        for(i = parseInt(coords[1])-1; i >= 1; i--){
+            let hlid = [coords[0], i].join('')
+            console.log(hlid)
+            if(document.getElementById(hlid).className == "none"){
+                hlids.push(hlid)
+            }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
+                hlids.push(hlid)
+                break
+            }else if(this.color == "black" && document.getElementById(hlid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+        }
+        console.log(hlids + 'hlids');
+
         for(let space of spaces){
             let newspot = space.id.split("");
-            let move = absMatSub(coords, newspot);
-            if((move[0] === 0 || move[1] === 0)){
-                console.log(space);
+            let move = absMatMath(coords, newspot);
+            if(move[0] === 0){
                 if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+                    //hids.push(space.id);
+                    //console.log(hids);
+                }
+            }else if(move[1] === 0){
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+                    //vids.push(space.id);
+                    //console.log(vids);
                 }
             }
         }
+
+        
+
+        //document.getElementById(space.id).setAttribute("possible","true");
+        //document.getElementById(space.id).style.background = "orange";
     };
 
     //Reorganize these into objects of objects
