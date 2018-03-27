@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         var move = absMatMath(coords, newspot);
-        var amove = regMatMath(subtract, coords, newspot);
+        var amove = regMatMath('subtract', coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -191,17 +191,190 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     Bishop.prototype.guide = function(coords, name){
         this.coords = coords.split("");
-        for(let space of spaces){
-            let newspot = space.id.split("");
-            let move = absMatMath(coords, newspot);
-            if((move[0] == move[1])){
-                console.log(space);
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+        let ulids = [];
+        let urids = [];
+        let dlids = [];
+        let drids = [];
+        console.log(coords)
 
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+        let c0 = parseInt(coords[0]);
+        let c1 = parseInt(coords[1]);
+        //up left guide
+        if(coords[0] <= 8-c1){    
+            console.log('upleft by 0')
+            let x = 1;
+            for(i = c0; i <= 8; i++){
+                let ulid = [i+1, c1 - x].join('')
+                x += 1;
+                console.log(ulid)
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(ulid).className == "none"){
+                    ulids.push(ulid)
+                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                    ulids.push(ulid)
+                    break
+                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
+                    console.log('cannot skip ul')
+                    break
                 }
             }
+        }else{
+            console.log('upleft by 1')
+            let x = 1;
+            
+            for(i = c1-1; i >= 1; i--){
+                let ulid = [c0+x, i].join('')
+                x += 1;
+                console.log(ulid)
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(ulid).className == "none"){
+                    ulids.push(ulid)
+                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                    ulids.push(ulid)
+                    break
+                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+
+        
+        //up right guide
+        if(c0 >= c1){
+            console.log('upright by 0')
+            let x = 1;
+            for(i = parseInt(coords[0])+1; i <= 8; i++){
+                let urid = [i, c1+x].join('')
+                x += 1;
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(urid).className == "none"){
+                    urids.push(urid)
+                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                    urids.push(urid)
+                    break
+                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                } 
+            }
+        }else{
+            console.log('upright by 1')
+            let x = 1;
+            for(i = parseInt(coords[1])+1; i <= 8; i++){
+                let urid = [c0+x, i].join('')
+                x += 1;
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(urid).className == "none"){
+                    urids.push(urid)
+                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                    urids.push(urid)
+                    break
+                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                } 
+            }
+        }
+
+
+        //down left guide
+        if(coords[1] >= coords[0]){
+            let x = 1;
+            console.log('dleft by 0')
+            for(i = c0-1; i >= 1; i--){
+                let dlid = [i, c1-x].join('')
+                x += 1;
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(dlid).className == "none"){
+                    dlids.push(dlid)
+                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                    dlids.push(dlid)
+                    break
+                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }else{
+            let x = 1;
+            console.log('dleft by 1')
+            for(i = parseInt(coords[0])-1; i >= 1; i--){
+                let dlid = [coords[0], i].join('')
+                console.log(dlid)
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(dlid).className == "none"){
+                    dlids.push(dlid)
+                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                    dlids.push(dlid)
+                    break
+                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+
+        //down right guide
+        if(coords[0] >= coords[1]){
+            console.log('dright by 1');
+            let x = 1;
+            for(i = c1+1; i <= 8; i++){
+                let drid = [c0 - x, i].join('')
+                x += 1;
+                console.log(drid)
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(drid).className == "none"){
+                    drids.push(drid)
+                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                    drids.push(drid)
+                    break
+                }else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }else{
+            console.log('dright by 0')
+            let x = 1;
+            for(i = c0-1; i >= 1; i--){
+                let drid = [i, c1 + x].join('')
+                x += 1;
+                console.log(drid)
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(drid).className == "none"){
+                    drids.push(drid)
+                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                    drids.push(drid)
+                    break
+                }else if(this.color == "black" && document.getElementById(drid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+        
+        let poss = urids.concat(ulids, drids, dlids);
+        
+        for(let id of poss){
+            document.getElementById(id).setAttribute("possible","true");
+            document.getElementById(id).style.background = "orange";
         }
     };
 
@@ -411,16 +584,260 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     Queen.prototype.guide = function(coords, name){
         this.coords = coords.split("");
-        for(let space of spaces){
-            let newspot = space.id.split("");
-            let move = absMatMath(coords, newspot);
-            if((move[0] === move[1] || move[0] === 0 || move[1] === 0)){
-                console.log(space.className + " " + name);
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+        let ulids = [];
+        let urids = [];
+        let dlids = [];
+        let drids = [];
+        console.log(coords)
+
+        let hlids = [];
+        let hrids = [];
+        let vuids = [];
+        let vdids = [];
+
+        let c0 = parseInt(coords[0]);
+        let c1 = parseInt(coords[1]);
+        //up left guide
+        if(coords[0] <= 8-c1){    
+            console.log('upleft by 0')
+            let x = 1;
+            for(i = c0; i <= 8; i++){
+                let ulid = [i+1, c1 - x].join('')
+                x += 1;
+                console.log(ulid)
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(ulid).className == "none"){
+                    ulids.push(ulid)
+                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                    ulids.push(ulid)
+                    break
+                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
+                    console.log('cannot skip ul')
+                    break
                 }
             }
+        }else{
+            console.log('upleft by 1')
+            let x = 1;
+            
+            for(i = c1-1; i >= 1; i--){
+                let ulid = [c0+x, i].join('')
+                x += 1;
+                console.log(ulid)
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(ulid).className == "none"){
+                    ulids.push(ulid)
+                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                    ulids.push(ulid)
+                    break
+                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+
+        
+        //up right guide
+        if(c0 >= c1){
+            console.log('upright by 0')
+            let x = 1;
+            for(i = parseInt(coords[0])+1; i <= 8; i++){
+                let urid = [i, c1+x].join('')
+                x += 1;
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(urid).className == "none"){
+                    urids.push(urid)
+                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                    urids.push(urid)
+                    break
+                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                } 
+            }
+        }else{
+            console.log('upright by 1')
+            let x = 1;
+            for(i = parseInt(coords[1])+1; i <= 8; i++){
+                let urid = [c0+x, i].join('')
+                x += 1;
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(urid).className == "none"){
+                    urids.push(urid)
+                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                    urids.push(urid)
+                    break
+                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                } 
+            }
+        }
+
+
+        //down left guide
+        if(coords[1] >= coords[0]){
+            let x = 1;
+            console.log('dleft by 0')
+            for(i = c0-1; i >= 1; i--){
+                let dlid = [i, c1-x].join('')
+                x += 1;
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(dlid).className == "none"){
+                    dlids.push(dlid)
+                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                    dlids.push(dlid)
+                    break
+                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }else{
+            let x = 1;
+            console.log('dleft by 1')
+            for(i = parseInt(coords[0])-1; i >= 1; i--){
+                let dlid = [coords[0], i].join('')
+                console.log(dlid)
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(dlid).className == "none"){
+                    dlids.push(dlid)
+                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                    dlids.push(dlid)
+                    break
+                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+
+        //down right guide
+        if(coords[0] >= coords[1]){
+            console.log('dright by 1');
+            let x = 1;
+            for(i = c1+1; i <= 8; i++){
+                let drid = [c0 - x, i].join('')
+                x += 1;
+                console.log(drid)
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(drid).className == "none"){
+                    drids.push(drid)
+                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                    drids.push(drid)
+                    break
+                }else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }else{
+            console.log('dright by 0')
+            let x = 1;
+            for(i = c0-1; i >= 1; i--){
+                let drid = [i, c1 + x].join('')
+                x += 1;
+                console.log(drid)
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                    break
+                
+                }else if(document.getElementById(drid).className == "none"){
+                    drids.push(drid)
+                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                    drids.push(drid)
+                    break
+                }else if(this.color == "black" && document.getElementById(drid).className.includes('black')){
+                    console.log('cannot skip')
+                    break
+                }
+            }
+        }
+
+        //up vertical guide
+        for(i = parseInt(coords[0])+1; i <= 8; i++){
+            let vuid = [i, coords[1]].join('')
+            console.log(vuid)
+            if(document.getElementById(vuid).className == "none"){
+                vuids.push(vuid)
+            }else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))){
+                vuids.push(vuid)
+                break
+            }else if(this.color == "black" && document.getElementById(vuid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+        }
+        console.log(vuids+'vuids'); 
+        
+        //down vertical guide
+        for(i = parseInt(coords[0])-1; i >= 1; i--){
+            let vdid = [i, coords[1]].join('')
+            
+            if(document.getElementById(vdid).className == "none"){
+                vdids.push(vdid)
+            }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
+                vdids.push(vdid)
+                break
+            }else if(this.color == "black" && document.getElementById(vdid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            } 
+        }
+        console.log(vdids+'vdids'); 
+
+        //right horizontal guide
+        for(i = parseInt(coords[1])+1; i <= 8; i++){
+            
+            let hrid = [coords[0], i].join('')
+            console.log(hrid)
+            if(document.getElementById(hrid).className == "none"){
+                hrids.push(hrid)
+            }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
+                hrids.push(hrid)
+                break
+            }else if(this.color == "black" && document.getElementById(hrid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+        }
+        console.log(hrids + 'hrids');
+
+        //left horizontal guide
+        for(i = parseInt(coords[1])-1; i >= 1; i--){
+            let hlid = [coords[0], i].join('')
+            console.log(hlid)
+            if(document.getElementById(hlid).className == "none"){
+                hlids.push(hlid)
+            }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
+                hlids.push(hlid)
+                break
+            }else if(this.color == "black" && document.getElementById(hlid).className.includes('black')){
+                console.log('cannot skip')
+                break
+            }
+        }
+        console.log(hlids + 'hlids');
+        
+        let poss = urids.concat(ulids, drids, dlids, hlids, hrids, vuids, vdids);
+        
+        for(let id of poss){
+            document.getElementById(id).setAttribute("possible","true");
+            document.getElementById(id).style.background = "orange";
         }
     };
 
@@ -457,13 +874,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
     //guides need to radiate outwards from the piece
+
+    //FINISH GUIDE TO ROOK AND QUEENS
     Rook.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         let hlids = [];
-        let hrids = []
+        let hrids = [];
         let vuids = [];
         let vdids = [];
         console.log(coords)
+
+        let c0 = parseInt(coords[0]);
+        let c1 = parseInt(coords[1]);
+
         //up vertical guide
         for(i = parseInt(coords[0])+1; i <= 8; i++){
             let vuid = [i, coords[1]].join('')
@@ -477,7 +900,6 @@ document.addEventListener("DOMContentLoaded", function(event){
                 console.log('cannot skip')
                 break
             }
-            
         }
         console.log(vuids+'vuids'); 
         
@@ -530,26 +952,14 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
         console.log(hlids + 'hlids');
 
-        for(let space of spaces){
-            let newspot = space.id.split("");
-            let move = absMatMath(coords, newspot);
-            if(move[0] === 0){
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
-                    //hids.push(space.id);
-                    //console.log(hids);
-                }
-            }else if(move[1] === 0){
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
-                    //vids.push(space.id);
-                    //console.log(vids);
-                }
-            }
-        }
-
         
-
-        //document.getElementById(space.id).setAttribute("possible","true");
-        //document.getElementById(space.id).style.background = "orange";
+        
+        let poss = vuids.concat(vdids, hlids, hrids);
+        
+        for(let id of poss){
+            document.getElementById(id).setAttribute("possible","true");
+            document.getElementById(id).style.background = "orange";
+        }
     };
 
     //Reorganize these into objects of objects
