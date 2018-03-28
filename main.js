@@ -309,9 +309,10 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             let x = 1;
             console.log('dleft by 1')
-            for(i = parseInt(coords[0])-1; i >= 1; i--){
-                let dlid = [coords[0], i].join('')
+            for(i = c0-1; i >= 1; i--){
+                let dlid = [i, c1-x].join('')
                 console.log(dlid)
+                x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
                     break
                 
@@ -582,6 +583,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
 
+    //Down left not working, rook horizontal guides not working
+
     Queen.prototype.guide = function(coords, name){
         this.coords = coords.split("");
         let ulids = [];
@@ -707,9 +710,10 @@ document.addEventListener("DOMContentLoaded", function(event){
         }else{
             let x = 1;
             console.log('dleft by 1')
-            for(i = parseInt(coords[0])-1; i >= 1; i--){
-                let dlid = [coords[0], i].join('')
+            for(i = c0-1; i >= 1; i--){
+                let dlid = [i, c1-x].join('')
                 console.log(dlid)
+                x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
                     break
                 
@@ -890,7 +894,6 @@ document.addEventListener("DOMContentLoaded", function(event){
         //up vertical guide
         for(i = parseInt(coords[0])+1; i <= 8; i++){
             let vuid = [i, coords[1]].join('')
-            console.log(vuid)
             if(document.getElementById(vuid).className == "none"){
                 vuids.push(vuid)
             }else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))){
@@ -906,7 +909,6 @@ document.addEventListener("DOMContentLoaded", function(event){
         //down vertical guide
         for(i = parseInt(coords[0])-1; i >= 1; i--){
             let vdid = [i, coords[1]].join('')
-            console.log(vuid)
             if(document.getElementById(vdid).className == "none"){
                 vdids.push(vdid)
             }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
@@ -920,10 +922,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         console.log(vdids+'vdids'); 
 
         //right horizontal guide
-        for(i = parseInt(coords[1])+1; i <= 8; i++){
+        for(i = c1+1; i <= 8; i++){
             
             let hrid = [coords[0], i].join('')
-            console.log(hrid)
             if(document.getElementById(hrid).className == "none"){
                 hrids.push(hrid)
             }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
@@ -937,9 +938,8 @@ document.addEventListener("DOMContentLoaded", function(event){
         console.log(hrids + 'hrids');
 
         //left horizontal guide
-        for(i = parseInt(coords[1])-1; i >= 1; i--){
+        for(i = c1-1; i >= 1; i--){
             let hlid = [coords[0], i].join('')
-            console.log(hlid)
             if(document.getElementById(hlid).className == "none"){
                 hlids.push(hlid)
             }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
