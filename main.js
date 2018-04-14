@@ -791,13 +791,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         //down vertical guide
         for(i = parseInt(coords[0])-1; i >= 1; i--){
             let vdid = [i, coords[1]].join('')
-            
+            console.log('aaa')
             if(document.getElementById(vdid).className == "none"){
                 vdids.push(vdid)
             }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
                 vdids.push(vdid)
                 break
-            }else if(this.color == "black" && document.getElementById(vdid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             } 
@@ -914,7 +914,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
                 vdids.push(vdid)
                 break
-            }else if(this.color == "black" && document.getElementById(vdid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             } 
