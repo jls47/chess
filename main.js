@@ -16,14 +16,7 @@ $(document).ready(function($){
     })
 })
 
-//Get rid of current possible spaces on board.  To be used at the start of the guiding process.
 
-var clearPoss = function(board){
-	for(var i = 0; i < board[0].children.length; i++){
-        var id = board[0].children[i].id;
-        document.getElementById(id).setAttribute("possible","false");
-    }
-}
 
 
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
@@ -96,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     //make the clearing function mostly only apply to the middle parts!  It's making the regular bits not clickable!
 
     function clear(){
-		clearPoss(board);
         for(var i = 0; i < board[0].children.length; i++){
             let id = board[0].children[i].id;
             despawn(id);
@@ -114,7 +106,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         //resetPossibles();
     }
 
-    
+    function resetPossibles(){
+        for(let space of spaces){
+            document.getElementById(space.id).setAttribute("possible","false");
+        }
+    }
 
     //Removing pieces from where they were before they moved.
     function despawn(spot){
@@ -213,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Add the values that are on white spaces to their own array too?  See if they line up, then remove the one furthest from the piece with matrix math
 
     Bishop.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         let ulids = [];
         let urids = [];
@@ -436,7 +431,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     };
 
     King.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
@@ -485,7 +479,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //not working.  need to fix
     Knight.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
@@ -539,7 +532,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Pawns can still attack forwards.  Need need NEED TO FIX THIS
 
     Pawn.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         for(let space of spaces){
             let newspot = space.id.split("");
@@ -613,7 +605,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     //Down left not working, rook horizontal guides not working
 
     Queen.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         let ulids = [];
         let urids = [];
@@ -909,7 +900,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //FINISH GUIDE TO ROOK AND QUEENS
     Rook.prototype.guide = function(coords, name){
-		clearPoss(board);
         this.coords = coords.split("");
         let hlids = [];
         let hrids = [];
