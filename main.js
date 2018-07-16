@@ -1,5 +1,24 @@
 
 
+$(document).ready(function($){
+    let clicked = false;
+    console.log('asfasdfn sdb fjsdn')
+    
+    $(".accordion-trigger").click(function(event){
+        event.preventDefault();
+        if(clicked == false){
+            $(".accordion-body").slideToggle();
+            clicked = true;
+        }else{
+            $(".accordion-body").slideToggle();
+            clicked = false;
+        }
+    })
+})
+
+
+
+
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
 var absMatMath = function(first, last){
     var move = [];
@@ -814,7 +833,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
                 hrids.push(hrid)
                 break
-            }else if(this.color == "black" && document.getElementById(hrid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             }
@@ -830,7 +849,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
                 hlids.push(hlid)
                 break
-            }else if(this.color == "black" && document.getElementById(hlid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             }
@@ -930,7 +949,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
                 hrids.push(hrid)
                 break
-            }else if(this.color == "black" && document.getElementById(hrid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             }
@@ -945,7 +964,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
                 hlids.push(hlid)
                 break
-            }else if(this.color == "black" && document.getElementById(hlid).className.includes('black')){
+            }else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
                 console.log('cannot skip')
                 break
             }
