@@ -1,15 +1,14 @@
 
 
-$(document).ready(function($){
+$(document).ready(function($) {
     let clicked = false;
-    console.log('asfasdfn sdb fjsdn')
     
-    $(".accordion-trigger").click(function(event){
+    $(".accordion-trigger").click(function(event) {
         event.preventDefault();
-        if(clicked == false){
+        if(clicked == false) {
             $(".accordion-body").slideToggle();
             clicked = true;
-        }else{
+        } else {
             $(".accordion-body").slideToggle();
             clicked = false;
         }
@@ -20,30 +19,23 @@ $(document).ready(function($){
 
 
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
-var absMatMath = function(first, last){
+//Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
+//This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
+var matMath = function(pawn,first, last) {
     var move = [];
-    for(var i = 0; i < 2; i++){
-        move.push(Math.abs(first[i]-last[i]));
+    if(pawn) {
+      for(var i = 0; i < 2; i++) {
+         move.push(first[i]-last[i]);
+      }
+    } else {
+      for(var i = 0; i < 2; i++) {
+         move.push(Math.abs(first[i]-last[i]));
+      }
     }
-   
     return move;
 };
 
-//Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
-//This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
-var regMatMath = function(operation, first, last){
-    var move = [];
-    if(operation == "subtract"){
-        for(var i = 0; i < 2; i++){
-            move.push(first[i]-last[i]);
-        }
-    }else if(operation == "add"){
-        for(var i = 0; i < 2; i++){
-            move.push(first[i] - last[i])
-        }
-    }
-    return move;
-};
+
 
 /////////////////////////////////////////////////////////////////////
 //Start restructuring.  You can have one universal movement function dependent upon different guide functions.
@@ -53,7 +45,7 @@ var regMatMath = function(operation, first, last){
 /////////////////////////////////////////////////////////////////////
 
 //When the board has loaded, we can begin.
-document.addEventListener("DOMContentLoaded", function(event){
+document.addEventListener("DOMContentLoaded", function(event) {
     //First, I establish the piece names.
 
     var Bblack1, Bblack2,  Kblack, Knblack1, Knblack2, Pblack1, Pblack2, Pblack3, Pblack4, Pblack5, Pblack6, Pblack7, Pblack8, Qblack, Rblack1, Rblack2;    
@@ -69,15 +61,15 @@ document.addEventListener("DOMContentLoaded", function(event){
     var tmp = '';
     var board = document.getElementsByClassName("board");
     //For each of the children on the board, iterate through white and the other color.  When the end of the board is reached, switch.
-    function color(){
-        for(var i = 0; i < board[0].children.length; i++){
+    function color() {
+        for(var i = 0; i < board[0].children.length; i++) {
             var id = board[0].children[i].id;
-            if(i % 2 === 0){
+            if(i % 2 === 0) {
                 document.getElementById(id).style.background = c2;
-            }else{
+            } else {
                 document.getElementById(id).style.background = c1;
             }
-            if(i >= 1 && (i+1) % 8 === 0){
+            if(i >= 1 && (i+1) % 8 === 0) {
                 tmp = c1;
                 c1 = c2;
                 c2 = tmp;
@@ -88,8 +80,8 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //make the clearing function mostly only apply to the middle parts!  It's making the regular bits not clickable!
 
-    function clear(){
-        for(var i = 0; i < board[0].children.length; i++){
+    function clear() {
+        for(var i = 0; i < board[0].children.length; i++) {
             let id = board[0].children[i].id;
             despawn(id);
         }
@@ -97,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     //Placing the pieces on the board.  Place them by name, spot coordinates, and image name.
-    function placement(fullname, piecename, spot){
+    function placement(fullname, piecename, spot) {
         this.name = piecename;
         this.spot = spot;
         this.src = './assets/' + this.name + '.png';
@@ -106,34 +98,33 @@ document.addEventListener("DOMContentLoaded", function(event){
         //resetPossibles();
     }
 
-    function resetPossibles(){
-        for(let space of spaces){
+    function resetPossibles() {
+        for(let space of spaces) {
             document.getElementById(space.id).setAttribute("possible","false");
         }
     }
 
     //Removing pieces from where they were before they moved.
-    function despawn(spot){
+    function despawn(spot) {
         this.spot = spot;
         document.getElementById(this.spot).innerHTML = '';
         document.getElementById(this.spot).setAttribute('class','none');
     }
 
     //Capturing enemy pieces.  Setting up a JSON array to contain the captured pieces so that if a pawn wants to become a different piece it can.
-    function capture(spot, fullname, imagetext){
+    function capture(spot, fullname, imagetext) {
         this.spot = spot;
         this.name = fullname;
-        console.log(imagetext);
-        if(imagetext.includes('king')){
+        if(imagetext.includes('king')) {
             alert("Game over!");
             clear();
         }
         //figure out if the names are being pushed to the capture list
-        if(this.name.includes('black')){
+        if(this.name.includes('black')) {
             wcapturedPieces.push(this.name);
             console.log(wcapturedPieces);
             localStorage.setItem('wcaptured', JSON.stringify(wcapturedPieces));
-        }else{
+        } else {
             bcapturedPieces.push(this.name);
             console.log(bcapturedPieces);
             localStorage.setItem('bcaptured', JSON.stringify(bcapturedPieces));
@@ -142,55 +133,55 @@ document.addEventListener("DOMContentLoaded", function(event){
         document.getElementById(this.spot).innerHTML = '';
     }
 
-    function move(coords, newspot, color, captured, fullname, imagetext){
+    function move(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        var amove = regMatMath("ubtract",coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        var amove = matMath(true, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(fullname, imagetext, newspot);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(fullname, imagetext, newspot);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
         }
     }
 
     //TO DO: MAKE PIECES UNABLE TO JUMP
         
-    function Bishop(spot, color, name){
+    function Bishop(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'bbish';
-        }else{
+        } else {
             this.piecename = "wbish";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
     }
 
-    Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        var amove = regMatMath('subtract', coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        var amove = matMath(true, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
@@ -208,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //If the values do not equal either 8 or 1 and there's a break then something.  Shit.  write more.
     //Add the values that are on white spaces to their own array too?  See if they line up, then remove the one furthest from the piece with matrix math
 
-    Bishop.prototype.guide = function(coords, name){
+    Bishop.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
         let ulids = [];
         let urids = [];
@@ -219,44 +210,42 @@ document.addEventListener("DOMContentLoaded", function(event){
         let c0 = parseInt(coords[0]);
         let c1 = parseInt(coords[1]);
         //up left guide
-        if(coords[0] <= 8-c1){    
-            console.log('upleft by 0')
+        if(coords[0] <= 8-c1) {    
             let x = 1;
-            for(i = c0; i <= 8; i++){
+            for(i = c0; i <= 8; i++) {
                 let ulid = [i+1, c1 - x].join('')
                 x += 1;
                 console.log(ulid)
-                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(ulid).className == "none"){
+                } else if(document.getElementById(ulid).className == "none") {
                     ulids.push(ulid)
-                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
                     ulids.push(ulid)
                     break
-                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
-                    console.log('cannot skip ul')
+                } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
+                    
                     break
                 }
             }
-        }else{
-            console.log('upleft by 1')
+        } else {
             let x = 1;
             
-            for(i = c1-1; i >= 1; i--){
+            for(i = c1-1; i >= 1; i--) {
                 let ulid = [c0+x, i].join('')
                 x += 1;
                 console.log(ulid)
-                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(ulid).className == "none"){
+                } else if(document.getElementById(ulid).className == "none") {
                     ulids.push(ulid)
-                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
                     ulids.push(ulid)
                     break
-                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
+                    
                     break
                 }
             }
@@ -264,41 +253,40 @@ document.addEventListener("DOMContentLoaded", function(event){
 
         
         //up right guide
-        if(c0 >= c1){
+        if(c0 >= c1) {
             console.log('upright by 0')
             let x = 1;
-            for(i = parseInt(coords[0])+1; i <= 8; i++){
+            for(i = parseInt(coords[0])+1; i <= 8; i++) {
                 let urid = [i, c1+x].join('')
                 x += 1;
-                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(urid).className == "none"){
+                } else if(document.getElementById(urid).className == "none") {
                     urids.push(urid)
-                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
                     urids.push(urid)
                     break
-                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
+                 
                     break
                 } 
             }
-        }else{
-            console.log('upright by 1')
+        } else {
             let x = 1;
-            for(i = parseInt(coords[1])+1; i <= 8; i++){
+            for(i = parseInt(coords[1])+1; i <= 8; i++) {
                 let urid = [c0+x, i].join('')
                 x += 1;
-                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(urid).className == "none"){
+                } else if(document.getElementById(urid).className == "none") {
                     urids.push(urid)
-                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
                     urids.push(urid)
                     break
-                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
+               
                     break
                 } 
             }
@@ -306,85 +294,78 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
         //down left guide
-        if(coords[1] >= coords[0]){
+        if(coords[1] >= coords[0]) {
             let x = 1;
-            console.log('dleft by 0')
-            for(i = c0-1; i >= 1; i--){
+            for(i = c0-1; i >= 1; i--) {
                 let dlid = [i, c1-x].join('')
                 x += 1;
-                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(dlid).className == "none"){
+                } else if(document.getElementById(dlid).className == "none") {
                     dlids.push(dlid)
-                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
                     dlids.push(dlid)
                     break
-                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
+               
                     break
                 }
             }
-        }else{
+        } else {
             let x = 1;
-            console.log('dleft by 1')
-            for(i = c0-1; i >= 1; i--){
+            for(i = c0-1; i >= 1; i--) {
                 let dlid = [i, c1-x].join('')
-                console.log(dlid)
                 x += 1;
-                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(dlid).className == "none"){
+                } else if(document.getElementById(dlid).className == "none") {
                     dlids.push(dlid)
-                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
                     dlids.push(dlid)
                     break
-                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
+
                     break
                 }
             }
         }
 
         //down right guide
-        if(coords[0] >= coords[1]){
-            console.log('dright by 1');
+        if(coords[0] >= coords[1]) {
             let x = 1;
-            for(i = c1+1; i <= 8; i++){
+            for(i = c1+1; i <= 8; i++) {
                 let drid = [c0 - x, i].join('')
                 x += 1;
-                console.log(drid)
-                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(drid).className == "none"){
+                } else if(document.getElementById(drid).className == "none") {
                     drids.push(drid)
-                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
                     drids.push(drid)
                     break
-                }else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')) {
+
                     break
                 }
             }
-        }else{
-            console.log('dright by 0')
+        } else {
             let x = 1;
-            for(i = c0-1; i >= 1; i--){
+            for(i = c0-1; i >= 1; i--) {
                 let drid = [i, c1 + x].join('')
                 x += 1;
-                console.log(drid)
-                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(drid).className == "none"){
+                } else if(document.getElementById(drid).className == "none") {
                     drids.push(drid)
-                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
                     drids.push(drid)
                     break
-                }else if(this.color == "black" && document.getElementById(drid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "black" && document.getElementById(drid).className.includes('black')) {
+
                     break
                 }
             }
@@ -392,52 +373,51 @@ document.addEventListener("DOMContentLoaded", function(event){
         
         let poss = urids.concat(ulids, drids, dlids);
         
-        for(let id of poss){
+        for(let id of poss) {
             document.getElementById(id).setAttribute("possible","true");
             document.getElementById(id).style.background = "orange";
         }
     };
 
-    function King(spot, color, name){
+    function King(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'bking';
-        }else{
+        } else {
             this.piecename = "wking";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
     }
 
-    King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!'); 
             resetPossibles();  
         }
     };
 
-    King.prototype.guide = function(coords, name){
+    King.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
-        for(let space of spaces){
+        for(let space of spaces) {
             let newspot = space.id.split("");
-            let move = absMatMath(coords, newspot);
-            if((move[0] === 0 && move[1] == 1) || (move[0] == 1 && move[1] === 0)){
-                console.log(space);
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+            let move = matMath(false, coords, newspot);
+            if((move[0] === 0 && move[1] == 1) || (move[0] == 1 && move[1] === 0)) {
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -445,47 +425,46 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
 
-    function Knight(spot, color, name){
+    function Knight(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'bkngt';
-        }else{
+        } else {
             this.piecename = "wkngt";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
     }
 
-    Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
     };
 
     //not working.  need to fix
-    Knight.prototype.guide = function(coords, name){
+    Knight.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
-        for(let space of spaces){
+        for(let space of spaces) {
             let newspot = space.id.split("");
-            let move = absMatMath(coords, newspot);
-            if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)){
-                console.log(space);
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))){
+            let move = matMath(false, coords, newspot);
+            if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)) {
+                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -493,13 +472,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
 
-    function Pawn(spot, color, name){
+    function Pawn(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'bpaun';
-        }else{
+        } else {
             this.piecename = "wpaun";
         }
         document.getElementById(spot).className = this.fullname;
@@ -507,23 +486,23 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
 
-    Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var amove = absMatMath(coords, newspot);
-        var move = regMatMath("subtract", coords, newspot);
+        var amove = matMath(false, coords, newspot);
+        var move = matMath(true, coords, newspot);
 
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
             resetPossibles();
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
@@ -531,36 +510,35 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     //Pawns can still attack forwards.  Need need NEED TO FIX THIS
 
-    Pawn.prototype.guide = function(coords, name){
+    Pawn.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
-        for(let space of spaces){
+        for(let space of spaces) {
             let newspot = space.id.split("");
-            var amove = absMatMath(this.coords, newspot);
-            var move = regMatMath("subtract",this.coords, newspot);
-            if(name.includes('b')){
-                if((move[0] == -1 && move[1] === 0) && space.className.includes("none")){
+            var amove = matMath(false, this.coords, newspot);
+            var move = matMath(true, this.coords, newspot);
+            if(name.includes('b')) {
+                if((move[0] == -1 && move[1] === 0) && space.className.includes("none")) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none"){
-                    console.log([(parseInt(newspot[0]) - 1) + newspot[1]].join());
-                    if(document.getElementById([(parseInt(newspot[0]) - 1)+ newspot[1]]).className == "none"){
+                } else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none") {
+                    if(document.getElementById([(parseInt(newspot[0]) - 1)+ newspot[1]]).className == "none") {
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
-                }else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')){
+                } else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
-            }else if(name.includes('w')){
-                if((move[0] == 1 && move[1] === 0) && space.className.includes("none")){
+            } else if(name.includes('w')) {
+                if((move[0] == 1 && move[1] === 0) && space.className.includes("none")) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
-                }else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none"){
-                    if(document.getElementById([(parseInt(newspot[0]) + 1)+ newspot[1]]).className == "none"){
+                } else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none") {
+                    if(document.getElementById([(parseInt(newspot[0]) + 1)+ newspot[1]]).className == "none") {
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
-                }else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')){
+                } else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -568,49 +546,48 @@ document.addEventListener("DOMContentLoaded", function(event){
         }
     };
 
-    function Queen(spot, color, name){
+    function Queen(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
         
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'bquen';
-        }else{
+        } else {
             this.piecename = "wquen";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
     }
     
-    Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        var amove = regMatMath("subtract", coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        var amove = matMath(true, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
     };
 
-    //Down left not working, rook horizontal guides not working
+    //Down not working, rook horizontal not working
 
-    Queen.prototype.guide = function(coords, name){
+    Queen.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
         let ulids = [];
         let urids = [];
         let dlids = [];
         let drids = [];
-        console.log(coords)
 
         let hlids = [];
         let hrids = [];
@@ -620,44 +597,40 @@ document.addEventListener("DOMContentLoaded", function(event){
         let c0 = parseInt(coords[0]);
         let c1 = parseInt(coords[1]);
         //up left guide
-        if(coords[0] <= 8-c1){    
-            console.log('upleft by 0')
+        if(coords[0] <= 8-c1) {    
             let x = 1;
-            for(i = c0; i <= 8; i++){
+            for(i = c0; i <= 8; i++) {
                 let ulid = [i+1, c1 - x].join('')
                 x += 1;
-                console.log(ulid)
-                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(ulid).className == "none"){
+                } else if(document.getElementById(ulid).className == "none") {
                     ulids.push(ulid)
-                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
                     ulids.push(ulid)
                     break
-                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
-                    console.log('cannot skip ul')
+                } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
+                    
                     break
                 }
             }
-        }else{
-            console.log('upleft by 1')
+        } else {
             let x = 1;
             
-            for(i = c1-1; i >= 1; i--){
+            for(i = c1-1; i >= 1; i--) {
                 let ulid = [c0+x, i].join('')
                 x += 1;
-                console.log(ulid)
-                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8){
+                if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(ulid).className == "none"){
+                } else if(document.getElementById(ulid).className == "none") {
                     ulids.push(ulid)
-                }else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
                     ulids.push(ulid)
                     break
-                }else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
+                    
                     break
                 }
             }
@@ -665,41 +638,39 @@ document.addEventListener("DOMContentLoaded", function(event){
 
         
         //up right guide
-        if(c0 >= c1){
-            console.log('upright by 0')
+        if(c0 >= c1) {
             let x = 1;
-            for(i = parseInt(coords[0])+1; i <= 8; i++){
+            for(i = parseInt(coords[0])+1; i <= 8; i++) {
                 let urid = [i, c1+x].join('')
                 x += 1;
-                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(urid).className == "none"){
+                } else if(document.getElementById(urid).className == "none") {
                     urids.push(urid)
-                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
                     urids.push(urid)
                     break
-                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
+                    
                     break
                 } 
             }
-        }else{
-            console.log('upright by 1')
+        } else {
             let x = 1;
-            for(i = parseInt(coords[1])+1; i <= 8; i++){
+            for(i = parseInt(coords[1])+1; i <= 8; i++) {
                 let urid = [c0+x, i].join('')
                 x += 1;
-                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8){
+                if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(urid).className == "none"){
+                } else if(document.getElementById(urid).className == "none") {
                     urids.push(urid)
-                }else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
                     urids.push(urid)
                     break
-                }else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
+                    
                     break
                 } 
             }
@@ -707,150 +678,138 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 
         //down left guide
-        if(coords[1] >= coords[0]){
+        if(coords[1] >= coords[0]) {
             let x = 1;
-            console.log('dleft by 0')
-            for(i = c0-1; i >= 1; i--){
+            for(i = c0-1; i >= 1; i--) {
                 let dlid = [i, c1-x].join('')
                 x += 1;
-                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(dlid).className == "none"){
+                } else if(document.getElementById(dlid).className == "none") {
                     dlids.push(dlid)
-                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
                     dlids.push(dlid)
                     break
-                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
+                    
                     break
                 }
             }
-        }else{
+        } else {
             let x = 1;
-            console.log('dleft by 1')
-            for(i = c0-1; i >= 1; i--){
-                let dlid = [i, c1-x].join('')
-                console.log(dlid)
+            for(i = c0-1; i >= 1; i--) {
+                let dlid = [i, c1-x].join('');
                 x += 1;
-                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8){
+                if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(dlid).className == "none"){
+                } else if(document.getElementById(dlid).className == "none") {
                     dlids.push(dlid)
-                }else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
                     dlids.push(dlid)
                     break
-                }else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
+                    
                     break
                 }
             }
         }
 
         //down right guide
-        if(coords[0] >= coords[1]){
-            console.log('dright by 1');
+        if(coords[0] >= coords[1]) {
             let x = 1;
-            for(i = c1+1; i <= 8; i++){
+            for(i = c1+1; i <= 8; i++) {
                 let drid = [c0 - x, i].join('')
                 x += 1;
-                console.log(drid)
-                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(drid).className == "none"){
+                } else if(document.getElementById(drid).className == "none") {
                     drids.push(drid)
-                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
                     drids.push(drid)
                     break
-                }else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')) {
+                    
                     break
                 }
             }
-        }else{
+        } else {
             console.log('dright by 0')
             let x = 1;
-            for(i = c0-1; i >= 1; i--){
+            for(i = c0-1; i >= 1; i--) {
                 let drid = [i, c1 + x].join('')
                 x += 1;
-                console.log(drid)
-                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8){
+                if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
                     break
                 
-                }else if(document.getElementById(drid).className == "none"){
+                } else if(document.getElementById(drid).className == "none") {
                     drids.push(drid)
-                }else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))){
+                } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
                     drids.push(drid)
                     break
-                }else if(this.color == "black" && document.getElementById(drid).className.includes('black')){
-                    console.log('cannot skip')
+                } else if(this.color == "black" && document.getElementById(drid).className.includes('black')) {
                     break
                 }
             }
         }
 
         //up vertical guide
-        for(i = parseInt(coords[0])+1; i <= 8; i++){
-            let vuid = [i, coords[1]].join('')
-            console.log(vuid)
-            if(document.getElementById(vuid).className == "none"){
-                vuids.push(vuid)
-            }else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))){
-                vuids.push(vuid)
-                break
-            }else if(this.color == "black" && document.getElementById(vuid).className.includes('black')){
-                console.log('cannot skip')
-                break
+        for(i = parseInt(coords[0])+1; i <= 8; i++) {
+            let vuid = [i, coords[1]].join('');
+            if(document.getElementById(vuid).className == "none") {
+                vuids.push(vuid);
+            } else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))) {
+                vuids.push(vuid);
+                break;
+            } else if(this.color == "black" && document.getElementById(vuid).className.includes('black')) {
+                break;
             }
         }
-        console.log(vuids+'vuids'); 
         
         //down vertical guide
-        for(i = parseInt(coords[0])-1; i >= 1; i--){
+        for(i = parseInt(coords[0])-1; i >= 1; i--) {
             let vdid = [i, coords[1]].join('')
             console.log('aaa')
-            if(document.getElementById(vdid).className == "none"){
+            if(document.getElementById(vdid).className == "none") {
                 vdids.push(vdid)
-            }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))) {
                 vdids.push(vdid)
                 break
-            }else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+           
                 break
             } 
         }
         console.log(vdids+'vdids'); 
 
         //right horizontal guide
-        for(i = parseInt(coords[1])+1; i <= 8; i++){
+        for(i = parseInt(coords[1])+1; i <= 8; i++) {
             
             let hrid = [coords[0], i].join('')
-            console.log(hrid)
-            if(document.getElementById(hrid).className == "none"){
+            if(document.getElementById(hrid).className == "none") {
                 hrids.push(hrid)
-            }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))) {
                 hrids.push(hrid)
                 break
-            }else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+     
                 break
             }
         }
         console.log(hrids + 'hrids');
 
         //left horizontal guide
-        for(i = parseInt(coords[1])-1; i >= 1; i--){
+        for(i = parseInt(coords[1])-1; i >= 1; i--) {
             let hlid = [coords[0], i].join('')
-            console.log(hlid)
-            if(document.getElementById(hlid).className == "none"){
+            if(document.getElementById(hlid).className == "none") {
                 hlids.push(hlid)
-            }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))) {
                 hlids.push(hlid)
                 break
-            }else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+        
                 break
             }
         }
@@ -858,40 +817,40 @@ document.addEventListener("DOMContentLoaded", function(event){
         
         let poss = urids.concat(ulids, drids, dlids, hlids, hrids, vuids, vdids);
         
-        for(let id of poss){
+        for(let id of poss) {
             document.getElementById(id).setAttribute("possible","true");
             document.getElementById(id).style.background = "orange";
         }
     };
 
-    function Rook(spot, color, name){
+    function Rook(spot, color, name) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == 'black'){
+        if(this.color == 'black') {
             this.piecename = 'brook';
-        }else{
+        } else {
             this.piecename = "wrook";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
     }
 
-    Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext){
+    Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = absMatMath(coords, newspot);
-        var amove = regMatMath("subtract", coords, newspot);
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false'){
+        var move = matMath(false, coords, newspot);
+        var amove = matMath(true, coords, newspot);
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true'){
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
             turn += 1;
-        }else{
+        } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
@@ -899,7 +858,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     //guides need to radiate outwards from the piece
 
     //FINISH GUIDE TO ROOK AND QUEENS
-    Rook.prototype.guide = function(coords, name){
+    Rook.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
         let hlids = [];
         let hrids = [];
@@ -911,78 +870,74 @@ document.addEventListener("DOMContentLoaded", function(event){
         let c1 = parseInt(coords[1]);
 
         //up vertical guide
-        for(i = parseInt(coords[0])+1; i <= 8; i++){
+        for(i = parseInt(coords[0])+1; i <= 8; i++) {
             let vuid = [i, coords[1]].join('')
-            if(document.getElementById(vuid).className == "none"){
+            if(document.getElementById(vuid).className == "none") {
                 vuids.push(vuid)
-            }else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))) {
                 vuids.push(vuid)
                 break
-            }else if(this.color == "black" && document.getElementById(vuid).className.includes('black')){
-                console.log('cannot skip')
+            } else if(this.color == "black" && document.getElementById(vuid).className.includes('black')) {
+                
                 break
             }
         }
-        console.log(vuids+'vuids'); 
         
         //down vertical guide
-        for(i = parseInt(coords[0])-1; i >= 1; i--){
+        for(i = parseInt(coords[0])-1; i >= 1; i--) {
             let vdid = [i, coords[1]].join('')
-            if(document.getElementById(vdid).className == "none"){
+            if(document.getElementById(vdid).className == "none") {
                 vdids.push(vdid)
-            }else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))) {
                 vdids.push(vdid)
                 break
-            }else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+                
                 break
             } 
         }
-        console.log(vdids+'vdids'); 
 
         //right horizontal guide
-        for(i = c1+1; i <= 8; i++){
+        for(i = c1+1; i <= 8; i++) {
             
             let hrid = [coords[0], i].join('')
-            if(document.getElementById(hrid).className == "none"){
+            if(document.getElementById(hrid).className == "none") {
                 hrids.push(hrid)
-            }else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))) {
                 hrids.push(hrid)
                 break
-            }else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+                
                 break
             }
         }
         console.log(hrids + 'hrids');
 
         //left horizontal guide
-        for(i = c1-1; i >= 1; i--){
+        for(i = c1-1; i >= 1; i--) {
             let hlid = [coords[0], i].join('')
-            if(document.getElementById(hlid).className == "none"){
+            if(document.getElementById(hlid).className == "none") {
                 hlids.push(hlid)
-            }else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))){
+            } else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))) {
                 hlids.push(hlid)
                 break
-            }else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))){
-                console.log('cannot skip')
+            } else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
+                
                 break
             }
         }
         console.log(hlids + 'hlids');
 
-        
-        
         let poss = vuids.concat(vdids, hlids, hrids);
         
-        for(let id of poss){
+        for(let id of poss) {
             document.getElementById(id).setAttribute("possible","true");
             document.getElementById(id).style.background = "orange";
         }
     };
 
     //Reorganize these into objects of objects
-    function start(){
+    function start() {
         localStorage.clear();
         clear();
         //A fresh start. Replacing all the pieces and clearing localstorage.
@@ -1066,7 +1021,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     start();  
 
-    document.getElementById('reset').addEventListener('click', function(){
+    document.getElementById('reset').addEventListener('click', function() {
         clear();
         start();
     });
@@ -1089,29 +1044,29 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     
 
-    for (let space of spaces){
+    for (let space of spaces) {
         //This is for the highlighting function.
         document.getElementById(space.id).setAttribute("possible","false");
         //Adding Event listeners to every board space.
-        space.addEventListener('click', function(){
+        space.addEventListener('click', function() {
             //If no piece has been selected and the space is empty, nothing happens.
             console.log(this.className);
-            if(localStorage.getItem("clickedpiece") == "none" && this.className == "none"){
+            if(localStorage.getItem("clickedpiece") == "none" && this.className == "none") {
                 console.log("Pick a piece!");
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
-            }else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none"){
+            } else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none") {
                 //Here I need to introduce the colored spaces thing.  Create a new function for it.
-                if((turn % 2 === 0 && this.className.includes("b")) || (turn % 2 !== 0 && this.className.includes("w"))){
+                if((turn % 2 === 0 && this.className.includes("b")) || (turn % 2 !== 0 && this.className.includes("w"))) {
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
                     color();
                     toPiece[this.className].guide(this.id, this.className);
-                }else{
+                } else {
                     alert("Not your turn!");
                 }
             //If a piece has been selected and the space is empty (move legitimacy is checked elsewhere), the piece will be moved there and the turn count will be increased.
             //Should I restructure the whole thing?  How?
-            }else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")){
+            } else if((localStorage.getItem("clickedpiece") != "none" && this.className == "none")) {
                 localStorage.setItem("captured", "false");
                 console.log('clicked piece to empty space');
                 toPiece[localStorage.getItem("clickedpiece")].move(localStorage.getItem("oldcoords"), this.id, localStorage.getItem("color"), localStorage.getItem("captured"), this.className, this.innerHTML.slice(19,24));
@@ -1121,10 +1076,10 @@ document.addEventListener("DOMContentLoaded", function(event){
                 localStorage.setItem("color","none");             
                 
             //This is where capturing begins. If a piece has been selected and the space has a piece that is not the same piece, the capture will not happen.
-            }else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true"){
+            } else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true") {
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 
-                if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))){
+                if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))) {
                     console.log('clicked piece to capture');
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
@@ -1133,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     localStorage.setItem("captured","false");
                     localStorage.setItem("clickedpiece","none");
                     localStorage.setItem("oldcoords", "none");
-                }else{
+                } else {
                     //If it's just a different piece of the same team, you switch to moving that piece.
                     console.log('clicked piece switching to other clicked piece');
                     localStorage.setItem("clickedpiece",this.className);
@@ -1143,7 +1098,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                     console.log('No friendly fire!');
                 }
                 
-            }else if(((localStorage.getItem("clickedpiece").includes("b") && this.className.includes("b")) || (localStorage.getItem("clickedpiece").includes("w") && this.className.includes("w")))){
+            } else if(((localStorage.getItem("clickedpiece").includes("b") && this.className.includes("b")) || (localStorage.getItem("clickedpiece").includes("w") && this.className.includes("w")))) {
                 //If it's just a different piece of the same team, you switch to moving that piece.
                 console.log('clicked piece switching to other clicked piece');
                 localStorage.setItem("clickedpiece",this.className);
