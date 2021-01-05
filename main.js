@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let spaces = document.querySelectorAll("[space = 'true']");
     
     //Styling the board.  Choosing white and light blue for the time being.
-    var c1 = 'white';
+    var c1 = 'blue';
     var c2 = 'lightblue';
     var tmp = '';
-    var board = document.getElementsByClassName("board");
+    var board = document.getElementsByClassName("spaces");
     //For each of the children on the board, iterate through white and the other color.  When the end of the board is reached, switch.
     function color() {
         for(var i = 0; i < board[0].children.length; i++) {

@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let spaces = document.querySelectorAll("[space = 'true']");
     
     //Styling the board.  Choosing white and light blue for the time being.
-    var c1 = 'white';
+    var c1 = 'rgb(242,242,242)';
     var c2 = 'lightblue';
     var tmp = '';
     var board = document.getElementsByClassName("board");
