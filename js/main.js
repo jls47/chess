@@ -477,9 +477,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.spot = spot;
         this.fullname = name;
         if(this.color == 'black') {
-            this.piecename = 'bpaun';
+            this.piecename = 'bpawn';
         } else {
-            this.piecename = "wpaun";
+            this.piecename = "wpawn";
         }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.piecename, this.spot);
