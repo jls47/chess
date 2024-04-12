@@ -48,8 +48,8 @@ var matMath = function(pawn,first, last) {
 document.addEventListener("DOMContentLoaded", function(event) {
     //First, I establish the piece names.
 
-    var Bblack1, Bblack2,  Kblack, Knblack1, Knblack2, Pblack1, Pblack2, Pblack3, Pblack4, Pblack5, Pblack6, Pblack7, Pblack8, Qblack, Rblack1, Rblack2;    
-    var Bwhite1, Bwhite2, Kwhite, Knwhite1, Knwhite2, Pwhite1, Pwhite2, Pwhite3, Pwhite4, Pwhite5, Pwhite6, Pwhite7, Pwhite8, Qwhite, Rwhite1, Rwhite2;
+    var bsBlack1, bsBlack2,  kgBlack, knBlack1, knBlack2, pnBlack1, pnBlack2, pnBlack3, pnBlack4, pnBlack5, pnBlack6, pnBlack7, pnBlack8, qnBlack, rkBlack1, rkBlack2;    
+    var bsWhite1, bsWhite2, kgWhite, knWhite1, knWhite2, pnWhite1, pnWhite2, pnWhite3, pnWhite4, pnWhite5, pnWhite6, pnWhite7, pnWhite8, qnWhite, rkWhite1, rkWhite2;
 
     var turn, bcapturedPieces, wcapturedPieces;
 
@@ -131,23 +131,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
         document.getElementById(this.spot).setAttribute('class','none');
         document.getElementById(this.spot).innerHTML = '';
-    }
-
-    function move(coords, newspot, color, captured, fullname, imagetext) {
-        this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(fullname, imagetext, newspot);
-            despawn(coords);
-            turn += 1;
-        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
-            placement(fullname, imagetext, newspot);
-            despawn(coords);
-            turn += 1;
-        } else {
-            alert('Cannot move there!');   
-        }
     }
 
     //TO DO: MAKE PIECES UNABLE TO JUMP
@@ -929,75 +912,75 @@ document.addEventListener("DOMContentLoaded", function(event) {
         localStorage.clear();
         clear();
         //A fresh start. Replacing all the pieces and clearing localstorage.
-        Bblack1 = new Bishop('13', 'black', 'Bblack1');
-        Bblack2 = new Bishop('16', 'black', 'Bblack2');
-        Kblack = new King('14', 'black', 'Kblack');
-        Knblack1 = new Knight('12', 'black', 'Knblack1');
-        Knblack2 = new Knight('17', 'black', 'Knblack2');
-        Pblack1 = new Pawn('21','black', 'Pblack1');
-        Pblack2 = new Pawn('22','black', 'Pblack2');
-        Pblack3 = new Pawn('23','black', 'Pblack3');
-        Pblack4 = new Pawn('24','black', 'Pblack4');
-        Pblack5 = new Pawn('25','black', 'Pblack5');
-        Pblack6 = new Pawn('26','black', 'Pblack6');
-        Pblack7 = new Pawn('27','black', 'Pblack7');
-        Pblack8 = new Pawn('28','black', 'Pblack8');
-        Qblack = new Queen('15','black', 'Qblack');
-        Rblack1 = new Rook('11','black', 'Rblack1');
-        Rblack2 = new Rook('18','black', 'Rblack1');
+        bsBlack1 = new Bishop('13', 'black', 'bsBlack1');
+        bsBlack2 = new Bishop('16', 'black', 'bsBlack2');
+        kgBlack = new King('14', 'black', 'kgBlack');
+        knBlack1 = new Knight('12', 'black', 'knBlack1');
+        knBlack2 = new Knight('17', 'black', 'knBlack2');
+        pnBlack1 = new Pawn('21','black', 'pnBlack1');
+        pnBlack2 = new Pawn('22','black', 'pnBlack2');
+        pnBlack3 = new Pawn('23','black', 'pnBlack3');
+        pnBlack4 = new Pawn('24','black', 'pnBlack4');
+        pnBlack5 = new Pawn('25','black', 'pnBlack5');
+        pnBlack6 = new Pawn('26','black', 'pnBlack6');
+        pnBlack7 = new Pawn('27','black', 'pnBlack7');
+        pnBlack8 = new Pawn('28','black', 'pnBlack8');
+        qnBlack = new Queen('15','black', 'qnBlack');
+        rkBlack1 = new Rook('11','black', 'rkBlack1');
+        rkBlack2 = new Rook('18','black', 'rkBlack1');
         
-        Bwhite1 = new Bishop('83', 'white', 'Bwhite1');
-        Bwhite2 = new Bishop('86', 'white', 'Bwhite2');
-        Kwhite = new King('84', 'white', 'Kwhite');
-        Knwhite1 = new Knight('82', 'white', 'Knwhite1');
-        Knwhite2 = new Knight('87', 'white', 'Knwhite2');
-        Pwhite1 = new Pawn('71','white', 'Pwhite1');
-        Pwhite2 = new Pawn('72','white', 'Pwhite2');
-        Pwhite3 = new Pawn('73','white', 'Pwhite3');
-        Pwhite4 = new Pawn('74','white', 'Pwhite4');
-        Pwhite5 = new Pawn('75','white', 'Pwhite5');
-        Pwhite6 = new Pawn('76','white', 'Pwhite6');
-        Pwhite7 = new Pawn('77','white', 'Pwhite7');
-        Pwhite8 = new Pawn('78','white', 'Pwhite8');
-        Qwhite = new Queen('85','white', 'Qwhite');
-        Rwhite1 = new Rook('81','white', 'Rwhite1');
-        Rwhite2 = new Rook('88','white', 'Rwhite2');
+        bsWhite1 = new Bishop('83', 'white', 'bsWhite1');
+        bsWhite2 = new Bishop('86', 'white', 'bsWhite2');
+        kgWhite = new King('84', 'white', 'kgWhite');
+        knWhite1 = new Knight('82', 'white', 'knWhite1');
+        knWhite2 = new Knight('87', 'white', 'knWhite2');
+        pnWhite1 = new Pawn('71','white', 'pnWhite1');
+        pnWhite2 = new Pawn('72','white', 'pnWhite2');
+        pnWhite3 = new Pawn('73','white', 'pnWhite3');
+        pnWhite4 = new Pawn('74','white', 'pnWhite4');
+        pnWhite5 = new Pawn('75','white', 'pnWhite5');
+        pnWhite6 = new Pawn('76','white', 'pnWhite6');
+        pnWhite7 = new Pawn('77','white', 'pnWhite7');
+        pnWhite8 = new Pawn('78','white', 'pnWhite8');
+        qnWhite = new Queen('85','white', 'qnWhite');
+        rkWhite1 = new Rook('81','white', 'rkWhite1');
+        rkWhite2 = new Rook('88','white', 'rkWhite2');
         
         //A dictionary of sorts.  It's bad practice to convert strings to variable names on the fly, so this is something else I can do.
         //Now, every stringified variable name will actually point to the variable name.  Handy!
         toPiece = {
-            'Bblack1': Bblack1,
-            'Bblack2': Bblack2,
-            'Kblack': Kblack,
-            'Knblack1': Knblack1,
-            'Knblack2': Knblack2,
-            'Pblack1': Pblack1,
-            'Pblack2': Pblack2,
-            'Pblack3': Pblack3,
-            'Pblack4': Pblack4,
-            'Pblack5': Pblack5,
-            'Pblack6': Pblack6,
-            'Pblack7': Pblack7,
-            'Pblack8': Pblack8,
-            'Qblack': Qblack,
-            'Rblack1': Rblack1,
-            'Rblack2': Rblack2,
-            'Bwhite1': Bwhite1,
-            'Bwhite2': Bwhite2,
-            'Kwhite': Kwhite,
-            'Knwhite1': Knwhite1,
-            'Knwhite2': Knwhite2,
-            'Pwhite1': Pwhite1,
-            'Pwhite2': Pwhite2,
-            'Pwhite3': Pwhite3,
-            'Pwhite4': Pwhite4,
-            'Pwhite5': Pwhite5,
-            'Pwhite6': Pwhite6,
-            'Pwhite7': Pwhite7,
-            'Pwhite8': Pwhite8,
-            'Qwhite': Qwhite,
-            'Rwhite1': Rwhite1,
-            'Rwhite2': Rwhite2,
+            'bsBlack1': bsBlack1,
+            'bsBlack2': bsBlack2,
+            'kgBlack': kgBlack,
+            'knBlack1': knBlack1,
+            'knBlack2': knBlack2,
+            'pnBlack1': pnBlack1,
+            'pnBlack2': pnBlack2,
+            'pnBlack3': pnBlack3,
+            'pnBlack4': pnBlack4,
+            'pnBlack5': pnBlack5,
+            'pnBlack6': pnBlack6,
+            'pnBlack7': pnBlack7,
+            'pnBlack8': pnBlack8,
+            'qnBlack': qnBlack,
+            'rkBlack1': rkBlack1,
+            'rkBlack2': rkBlack2,
+            'bsWhite1': bsWhite1,
+            'bsWhite2': bsWhite2,
+            'kgWhite': kgWhite,
+            'knWhite1': knWhite1,
+            'knWhite2': knWhite2,
+            'pnWhite1': pnWhite1,
+            'pnWhite2': pnWhite2,
+            'pnWhite3': pnWhite3,
+            'pnWhite4': pnWhite4,
+            'pnWhite5': pnWhite5,
+            'pnWhite6': pnWhite6,
+            'pnWhite7': pnWhite7,
+            'pnWhite8': pnWhite8,
+            'qnWhite': qnWhite,
+            'rkWhite1': rkWhite1,
+            'rkWhite2': rkWhite2,
         };
         wcapturedPieces = [];
         bcapturedPieces = [];
@@ -1024,7 +1007,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //let spaces = document.querySelectorAll("[space = 'true']");
     
     
-    //example movement: Pwhite7.move('77','67');
+    //example movement: pnWhite7.move('77','67');
 
     //Flip a coin to decide who goes first
     //Set one of the two colors to have their turn on evens or odds
