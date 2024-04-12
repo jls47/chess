@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             let newspot = space.id.split("");
             let move = matMath(false, coords, newspot);
             if((move[0] === 0 && move[1] == 1) || (move[0] == 1 && move[1] === 0)) {
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))) {
+                if(space.className == "none" || ((space.className.includes('B') && name.includes('W')) || (space.className.includes('W') && name.includes('B')))) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             let newspot = space.id.split("");
             let move = matMath(false, coords, newspot);
             if((move[0] == 1 && move[1] == 2) || (move[0] == 2 && move[1] == 1)) {
-                if(space.className == "none" || ((space.className.includes("b") && name.includes("w")) || (space.className.includes("w") && name.includes("b")))) {
+                if(space.className == "none" || ((space.className.includes('B') && name.includes('W')) || (space.className.includes('W') && name.includes('B')))) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -491,7 +491,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             let newspot = space.id.split("");
             var amove = matMath(false, this.coords, newspot);
             var move = matMath(true, this.coords, newspot);
-            if(name.includes('b')) {
+            if(name.includes('B')) {
                 if((move[0] == -1 && move[1] === 0) && space.className.includes("none")) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
@@ -500,11 +500,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
-                } else if((move[0] == -1 && amove[1] == 1) && space.className.includes('w')) {
+                } else if((move[0] == -1 && amove[1] == 1) && space.className.includes('W')) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
-            } else if(name.includes('w')) {
+            } else if(name.includes('W')) {
                 if((move[0] == 1 && move[1] === 0) && space.className.includes("none")) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         document.getElementById(space.id).setAttribute("possible","true");
                         document.getElementById(space.id).style.background = "orange";
                     }
-                } else if((move[0] == 1 && amove[1] == 1) && space.className.includes('b')) {
+                } else if((move[0] == 1 && amove[1] == 1) && space.className.includes('B')) {
                     document.getElementById(space.id).setAttribute("possible","true");
                     document.getElementById(space.id).style.background = "orange";
                 }
@@ -1027,7 +1027,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             //If no piece has been selected and the space is not empty, this piece is now the clicked one.  This is where the turn functionality will go.
             } else if(localStorage.getItem("clickedpiece") == "none" && this.className != "none") {
                 //Here I need to introduce the colored spaces thing.  Create a new function for it.
-                if((turn % 2 === 0 && this.className.includes("b")) || (turn % 2 !== 0 && this.className.includes("w"))) {
+                if((turn % 2 === 0 && this.className.includes("B")) || (turn % 2 !== 0 && this.className.includes("W"))) {
                     localStorage.setItem("clickedpiece",this.className);
                     localStorage.setItem("oldcoords", this.id);
                     color();
@@ -1050,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             } else if(((localStorage.getItem("clickedpiece") != "none" && this.className != "none") && localStorage.getItem("clickedpiece") != this.className) && this.getAttribute("possible") == "true") {
                 //If the new space has a piece that is a different color, then capturing will occur.  
                 
-                if(((localStorage.getItem("clickedpiece").includes('w') && this.className.includes('b'))) || ((localStorage.getItem("clickedpiece").includes('b') && this.className.includes('w')))) {
+                if(((localStorage.getItem("clickedpiece").includes('W') && this.className.includes('B'))) || ((localStorage.getItem("clickedpiece").includes('B') && this.className.includes('W')))) {
                     console.log('clicked piece to capture');
                     localStorage.setItem("captured","true");
                     //Moving the piece.  It also captures if the right conditions are met, such as "captured" being set to true.
@@ -1069,7 +1069,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     console.log('No friendly fire!');
                 }
                 
-            } else if(((localStorage.getItem("clickedpiece").includes("b") && this.className.includes("b")) || (localStorage.getItem("clickedpiece").includes("w") && this.className.includes("w")))) {
+            } else if(((localStorage.getItem("clickedpiece").includes("B") && this.className.includes("B")) || (localStorage.getItem("clickedpiece").includes('W') && this.className.includes('W')))) {
                 //If it's just a different piece of the same team, you switch to moving that piece.
                 console.log('clicked piece switching to other clicked piece');
                 localStorage.setItem("clickedpiece",this.className);
