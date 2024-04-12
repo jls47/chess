@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     //Placing the pieces on the board.  Place them by name, spot coordinates, and image name.
-    function placement(name, piecename, spot) {
+    function placement(name, spot) {
         this.spot = spot;
         this.src = './assets/' + name.substring(0, 7) + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wbish";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
 
     Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             if(captured == 'true') {
                 capture(newspot, fullname, imagetext);
             }
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else {
@@ -223,19 +223,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wking";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
 
     King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else {
@@ -268,19 +268,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wkngt";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
 
     Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else {
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wpawn";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
 
 
@@ -322,26 +322,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
 
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(this.fullname, this.piecename, newspot, this.color);
+        if(document.getElementById(newspot).getAttribute("possible") == "true") {
+            if(captured == 'true') {
+                capture(newspot, fullname, imagetext);
+            }
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
             resetPossibles();
-        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
-            placement(this.fullname, this.piecename, newspot, this.color);
-            despawn(coords);
-            turn += 1;
         } else {
             alert('Cannot move there!');   
             resetPossibles();
         }
     };
 
-    //Pawns can still attack forwards.  Need need NEED TO FIX THIS
-
     Pawn.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
+        /*
+        Eventually I am going to come back to this mess and completely redo it.  Jesus christ.
+        */
         for(let space of spaces) {
             let newspot = space.id.split("");
             var amove = matMath(false, this.coords, newspot);
@@ -374,6 +373,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }
             }
         }
+
+        
     };
 
     function Queen(spot, color, name) {
@@ -387,19 +388,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wquen";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
     
     Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(this.fullname, this.piecename, newspot, this.color);
-            despawn(coords);
-            turn += 1;
-        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
-            placement(this.fullname, this.piecename, newspot, this.color);
+        if(document.getElementById(newspot).getAttribute("possible") == "true") {
+            if(captured == "true") {
+                capture(newspot, fullname, imagetext);
+            }
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else {
@@ -407,8 +406,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
             resetPossibles();
         }
     };
-
-    //Down not working, rook horizontal not working
 
     Queen.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
@@ -448,19 +445,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.piecename = "wrook";
         }
         document.getElementById(spot).className = this.fullname;
-        placement(this.fullname, this.piecename, this.spot);
+        placement(this.fullname, this.spot);
     }
 
     Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
             capture(newspot, fullname, imagetext);
-            placement(this.fullname, this.piecename, newspot, this.color);
+            placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
         } else {
@@ -530,8 +527,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         rkWhite1 = new Rook('81',"White", 'rkWhite1');
         rkWhite2 = new Rook('88',"White", 'rkWhite2');
         
-        //A dictionary of sorts.  It's bad practice to convert strings to variable names on the fly, so this is something else I can do.
-        //Now, every stringified variable name will actually point to the variable name.  Handy!
+        
         toPiece = {
             'bsBlack1': bsBlack1,
             'bsBlack2': bsBlack2,
@@ -581,23 +577,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         start();
     });
 
-    //Another problem is that pieces can jump over each other willy nilly.  Can't have it.  Need to make it so that if pieces are
-    //in between (set up some sort of matrix math function?) and users try to click on or past a friendly it doesnt happen
-
-    //NEW TO DO:  MAKE IT SO THAT YOU CAN ONLY CAPTURE PIECES ON VALID MOVES
-    //Add the capture function to the move functions
     
     board = document.getElementsByClassName("board");
-    //let spaces = document.querySelectorAll("[space = 'true']");
-    
-    
-    //example movement: pnWhite7.move('77','67');
-
-    //Flip a coin to decide who goes first
-    //Set one of the two colors to have their turn on evens or odds
-    //iterate turn count every time a piece is moved
-
-    
 
     for (let space of spaces) {
         //This is for the highlighting function.
