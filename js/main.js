@@ -1,23 +1,5 @@
 
 
-$(document).ready(function($) {
-    let clicked = false;
-    
-    $(".accordion-trigger").click(function(event) {
-        event.preventDefault();
-        if(clicked == false) {
-            $(".accordion-body").slideToggle();
-            clicked = true;
-        } else {
-            $(".accordion-body").slideToggle();
-            clicked = false;
-        }
-    })
-})
-
-
-
-
 //Simple matrix math function.  I use cartesian coordinates for the spaces instead of e5, e3, etc. so that move legality can be determined easily.
 //Pawns, since they can only move forward, need to have a matrix function that doesn't rely on absolute values for moving.
 //This will also come in handy for the guidance function and determining whether pieces can move past a certain point.
