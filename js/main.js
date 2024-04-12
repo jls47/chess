@@ -136,8 +136,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function move(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
-        var amove = matMath(true, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(fullname, imagetext, newspot);
             despawn(coords);
@@ -170,8 +168,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
-        var amove = matMath(true, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -395,7 +391,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -441,7 +436,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -489,8 +483,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var amove = matMath(false, coords, newspot);
-        var move = matMath(true, coords, newspot);
 
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -563,8 +555,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
-        var amove = matMath(true, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -839,8 +829,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
-        var amove = matMath(true, coords, newspot);
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
