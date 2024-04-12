@@ -12,8 +12,8 @@ $(document).ready(function($) {
             $(".accordion-body").slideToggle();
             clicked = false;
         }
-    })
-})
+    });
+});
 
 
 
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let urids = [];
         let dlids = [];
         let drids = [];
-        console.log(coords)
+        console.log(coords);
 
         let c0 = parseInt(coords[0]);
         let c1 = parseInt(coords[1]);
@@ -213,40 +213,40 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[0] <= 8-c1) {    
             let x = 1;
             for(i = c0; i <= 8; i++) {
-                let ulid = [i+1, c1 - x].join('')
+                let ulid = [i+1, c1 - x].join('');
                 x += 1;
-                console.log(ulid)
+                console.log(ulid);
                 if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(ulid).className == "none") {
-                    ulids.push(ulid)
+                    ulids.push(ulid);
                 } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
-                    ulids.push(ulid)
-                    break
+                    ulids.push(ulid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         } else {
             let x = 1;
             
             for(i = c1-1; i >= 1; i--) {
-                let ulid = [c0+x, i].join('')
+                let ulid = [c0+x, i].join('');
                 x += 1;
-                console.log(ulid)
+                console.log(ulid);
                 if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(ulid).className == "none") {
-                    ulids.push(ulid)
+                    ulids.push(ulid);
                 } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
-                    ulids.push(ulid)
-                    break
+                    ulids.push(ulid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         }
@@ -254,40 +254,40 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         //up right guide
         if(c0 >= c1) {
-            console.log('upright by 0')
+            console.log('upright by 0');
             let x = 1;
             for(i = parseInt(coords[0])+1; i <= 8; i++) {
-                let urid = [i, c1+x].join('')
+                let urid = [i, c1+x].join('');
                 x += 1;
                 if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(urid).className == "none") {
-                    urids.push(urid)
+                    urids.push(urid);
                 } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
-                    urids.push(urid)
-                    break
+                    urids.push(urid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
                  
-                    break
+                    break;
                 } 
             }
         } else {
             let x = 1;
             for(i = parseInt(coords[1])+1; i <= 8; i++) {
-                let urid = [c0+x, i].join('')
+                let urid = [c0+x, i].join('');
                 x += 1;
                 if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(urid).className == "none") {
-                    urids.push(urid)
+                    urids.push(urid);
                 } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
-                    urids.push(urid)
-                    break
+                    urids.push(urid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
                
-                    break
+                    break;
                 } 
             }
         }
@@ -297,37 +297,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[1] >= coords[0]) {
             let x = 1;
             for(i = c0-1; i >= 1; i--) {
-                let dlid = [i, c1-x].join('')
+                let dlid = [i, c1-x].join('');
                 x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(dlid).className == "none") {
-                    dlids.push(dlid)
+                    dlids.push(dlid);
                 } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
-                    dlids.push(dlid)
-                    break
+                    dlids.push(dlid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
                
-                    break
+                    break;
                 }
             }
         } else {
             let x = 1;
             for(i = c0-1; i >= 1; i--) {
-                let dlid = [i, c1-x].join('')
+                let dlid = [i, c1-x].join('');
                 x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(dlid).className == "none") {
-                    dlids.push(dlid)
+                    dlids.push(dlid);
                 } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
-                    dlids.push(dlid)
-                    break
+                    dlids.push(dlid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
 
-                    break
+                    break;
                 }
             }
         }
@@ -336,37 +336,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[0] >= coords[1]) {
             let x = 1;
             for(i = c1+1; i <= 8; i++) {
-                let drid = [c0 - x, i].join('')
+                let drid = [c0 - x, i].join('');
                 x += 1;
                 if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(drid).className == "none") {
-                    drids.push(drid)
+                    drids.push(drid);
                 } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
-                    drids.push(drid)
-                    break
+                    drids.push(drid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')) {
 
-                    break
+                    break;
                 }
             }
         } else {
             let x = 1;
             for(i = c0-1; i >= 1; i--) {
-                let drid = [i, c1 + x].join('')
+                let drid = [i, c1 + x].join('');
                 x += 1;
                 if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(drid).className == "none") {
-                    drids.push(drid)
+                    drids.push(drid);
                 } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
-                    drids.push(drid)
-                    break
+                    drids.push(drid);
+                    break;
                 } else if(this.color == "black" && document.getElementById(drid).className.includes('black')) {
 
-                    break
+                    break;
                 }
             }
         }
@@ -489,8 +489,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var amove = matMath(false, coords, newspot);
-        var move = matMath(true, coords, newspot);
 
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
@@ -563,8 +561,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        var move = matMath(false, coords, newspot);
-        var amove = matMath(true, coords, newspot);
+        
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
             placement(this.fullname, this.piecename, newspot, this.color);
             despawn(coords);
@@ -582,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //Down not working, rook horizontal not working
 
-    Queen.prototype.guide = function(coords, name) {
+    Queen.prototype.guide = function(coords) {
         this.coords = coords.split("");
         let ulids = [];
         let urids = [];
@@ -600,38 +597,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[0] <= 8-c1) {    
             let x = 1;
             for(i = c0; i <= 8; i++) {
-                let ulid = [i+1, c1 - x].join('')
+                let ulid = [i+1, c1 - x].join('');
                 x += 1;
                 if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(ulid).className == "none") {
-                    ulids.push(ulid)
+                    ulids.push(ulid);
                 } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
-                    ulids.push(ulid)
-                    break
+                    ulids.push(ulid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         } else {
             let x = 1;
             
             for(i = c1-1; i >= 1; i--) {
-                let ulid = [c0+x, i].join('')
+                let ulid = [c0+x, i].join('');
                 x += 1;
                 if(ulid[1] < 1 || ulid[1] > 8 || ulid[0] < 1 || ulid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(ulid).className == "none") {
-                    ulids.push(ulid)
+                    ulids.push(ulid);
                 } else if((this.color == "black" && document.getElementById(ulid).className.includes('white')) || (this.color == "white" && document.getElementById(ulid).className.includes('black'))) {
-                    ulids.push(ulid)
-                    break
+                    ulids.push(ulid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(ulid).className.includes('white') || this.color == "black" && document.getElementById(ulid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         }
@@ -641,37 +638,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(c0 >= c1) {
             let x = 1;
             for(i = parseInt(coords[0])+1; i <= 8; i++) {
-                let urid = [i, c1+x].join('')
+                let urid = [i, c1+x].join('');
                 x += 1;
                 if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(urid).className == "none") {
-                    urids.push(urid)
+                    urids.push(urid);
                 } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
-                    urids.push(urid)
-                    break
+                    urids.push(urid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
                     
-                    break
+                    break;
                 } 
             }
         } else {
             let x = 1;
             for(i = parseInt(coords[1])+1; i <= 8; i++) {
-                let urid = [c0+x, i].join('')
+                let urid = [c0+x, i].join('');
                 x += 1;
                 if(urid[1] < 1 || urid[1] > 8 || urid[0] < 1 || urid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(urid).className == "none") {
-                    urids.push(urid)
+                    urids.push(urid);
                 } else if((this.color == "black" && document.getElementById(urid).className.includes('white')) || (this.color == "white" && document.getElementById(urid).className.includes('black'))) {
-                    urids.push(urid)
-                    break
+                    urids.push(urid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(urid).className.includes('white') || this.color == "black" && document.getElementById(urid).className.includes('black')) {
                     
-                    break
+                    break;
                 } 
             }
         }
@@ -681,19 +678,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[1] >= coords[0]) {
             let x = 1;
             for(i = c0-1; i >= 1; i--) {
-                let dlid = [i, c1-x].join('')
+                let dlid = [i, c1-x].join('');
                 x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(dlid).className == "none") {
-                    dlids.push(dlid)
+                    dlids.push(dlid);
                 } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
-                    dlids.push(dlid)
-                    break
+                    dlids.push(dlid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         } else {
@@ -702,16 +699,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 let dlid = [i, c1-x].join('');
                 x += 1;
                 if(dlid[1] < 1 || dlid[1] > 8 || dlid[0] < 1 || dlid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(dlid).className == "none") {
-                    dlids.push(dlid)
+                    dlids.push(dlid);
                 } else if((this.color == "black" && document.getElementById(dlid).className.includes('white')) || (this.color == "white" && document.getElementById(dlid).className.includes('black'))) {
-                    dlids.push(dlid)
-                    break
+                    dlids.push(dlid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(dlid).className.includes('white') || this.color == "black" && document.getElementById(dlid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         }
@@ -720,37 +717,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(coords[0] >= coords[1]) {
             let x = 1;
             for(i = c1+1; i <= 8; i++) {
-                let drid = [c0 - x, i].join('')
+                let drid = [c0 - x, i].join('');
                 x += 1;
                 if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(drid).className == "none") {
-                    drids.push(drid)
+                    drids.push(drid);
                 } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
-                    drids.push(drid)
-                    break
+                    drids.push(drid);
+                    break;
                 } else if(this.color == "white" && document.getElementById(drid).className.includes('white') || this.color == "black" && document.getElementById(drid).className.includes('black')) {
                     
-                    break
+                    break;
                 }
             }
         } else {
-            console.log('dright by 0')
+            console.log('dright by 0');
             let x = 1;
             for(i = c0-1; i >= 1; i--) {
-                let drid = [i, c1 + x].join('')
+                let drid = [i, c1 + x].join('');
                 x += 1;
                 if(drid[1] < 1 || drid[1] > 8 || drid[0] < 1 || drid[0] > 8) {
-                    break
+                    break;
                 
                 } else if(document.getElementById(drid).className == "none") {
-                    drids.push(drid)
+                    drids.push(drid);
                 } else if((this.color == "black" && document.getElementById(drid).className.includes('white')) || (this.color == "white" && document.getElementById(drid).className.includes('black'))) {
-                    drids.push(drid)
-                    break
+                    drids.push(drid);
+                    break;
                 } else if(this.color == "black" && document.getElementById(drid).className.includes('black')) {
-                    break
+                    break;
                 }
             }
         }
@@ -770,16 +767,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         //down vertical guide
         for(i = parseInt(coords[0])-1; i >= 1; i--) {
-            let vdid = [i, coords[1]].join('')
-            console.log('aaa')
+            let vdid = [i, coords[1]].join('');
+            console.log('aaa');
             if(document.getElementById(vdid).className == "none") {
-                vdids.push(vdid)
+                vdids.push(vdid);
             } else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))) {
-                vdids.push(vdid)
-                break
+                vdids.push(vdid);
+                break;
             } else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
            
-                break
+                break;
             } 
         }
         console.log(vdids+'vdids'); 
@@ -787,30 +784,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //right horizontal guide
         for(i = parseInt(coords[1])+1; i <= 8; i++) {
             
-            let hrid = [coords[0], i].join('')
+            let hrid = [coords[0], i].join('');
             if(document.getElementById(hrid).className == "none") {
-                hrids.push(hrid)
+                hrids.push(hrid);
             } else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))) {
-                hrids.push(hrid)
-                break
+                hrids.push(hrid);
+                break;
             } else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
      
-                break
+                break;
             }
         }
         console.log(hrids + 'hrids');
 
         //left horizontal guide
         for(i = parseInt(coords[1])-1; i >= 1; i--) {
-            let hlid = [coords[0], i].join('')
+            let hlid = [coords[0], i].join('');
             if(document.getElementById(hlid).className == "none") {
-                hlids.push(hlid)
+                hlids.push(hlid);
             } else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))) {
-                hlids.push(hlid)
-                break
+                hlids.push(hlid);
+                break;
             } else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
         
-                break
+                break;
             }
         }
         console.log(hlids + 'hlids');
@@ -864,66 +861,66 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let hrids = [];
         let vuids = [];
         let vdids = [];
-        console.log(coords)
+        console.log(coords);
 
         let c0 = parseInt(coords[0]);
         let c1 = parseInt(coords[1]);
 
         //up vertical guide
         for(i = parseInt(coords[0])+1; i <= 8; i++) {
-            let vuid = [i, coords[1]].join('')
+            let vuid = [i, coords[1]].join('');
             if(document.getElementById(vuid).className == "none") {
-                vuids.push(vuid)
+                vuids.push(vuid);
             } else if((this.color == "black" && document.getElementById(vuid).className.includes('white')) || (this.color == "white" && document.getElementById(vuid).className.includes('black'))) {
-                vuids.push(vuid)
-                break
+                vuids.push(vuid);
+                break;
             } else if(this.color == "black" && document.getElementById(vuid).className.includes('black')) {
                 
-                break
+                break;
             }
         }
         
         //down vertical guide
         for(i = parseInt(coords[0])-1; i >= 1; i--) {
-            let vdid = [i, coords[1]].join('')
+            let vdid = [i, coords[1]].join('');
             if(document.getElementById(vdid).className == "none") {
-                vdids.push(vdid)
+                vdids.push(vdid);
             } else if((this.color == "black" && document.getElementById(vdid).className.includes('white')) || (this.color == "white" && document.getElementById(vdid).className.includes('black'))) {
-                vdids.push(vdid)
-                break
+                vdids.push(vdid);
+                break;
             } else if((this.color == "black" && document.getElementById(vdid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
                 
-                break
+                break;
             } 
         }
 
         //right horizontal guide
         for(i = c1+1; i <= 8; i++) {
             
-            let hrid = [coords[0], i].join('')
+            let hrid = [coords[0], i].join('');
             if(document.getElementById(hrid).className == "none") {
-                hrids.push(hrid)
+                hrids.push(hrid);
             } else if((this.color == "black" && document.getElementById(hrid).className.includes('white')) || (this.color == "white" && document.getElementById(hrid).className.includes('black'))) {
-                hrids.push(hrid)
-                break
+                hrids.push(hrid);
+                break;
             } else if((this.color == "black" && document.getElementById(hrid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
                 
-                break
+                break;
             }
         }
         console.log(hrids + 'hrids');
 
         //left horizontal guide
         for(i = c1-1; i >= 1; i--) {
-            let hlid = [coords[0], i].join('')
+            let hlid = [coords[0], i].join('');
             if(document.getElementById(hlid).className == "none") {
-                hlids.push(hlid)
+                hlids.push(hlid);
             } else if((this.color == "black" && document.getElementById(hlid).className.includes('white')) || (this.color == "white" && document.getElementById(hlid).className.includes('black'))) {
-                hlids.push(hlid)
-                break
+                hlids.push(hlid);
+                break;
             } else if((this.color == "black" && document.getElementById(hlid).className.includes('black')) || (this.color == "white" && document.getElementById(vdid).className.includes('white'))) {
                 
-                break
+                break;
             }
         }
         console.log(hlids + 'hlids');
@@ -935,6 +932,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             document.getElementById(id).style.background = "orange";
         }
     };
+
+    function diagonalGuide(coords, c0, c1, );
 
     //Reorganize these into objects of objects
     function start() {
