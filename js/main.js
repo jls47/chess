@@ -22,6 +22,39 @@ const opps = {
     'B': 'W'
 }
 
+//make the clearing function mostly only apply to the middle parts!  It's making the regular bits not clickable!
+
+const board = document.getElementsByClassName("board");
+
+const clear = () => {
+    var c1 = 'rgb(242,242,242)';
+    var c2 = 'lightblue';
+    for(var i = 0; i < board[0].children.length; i++) {
+        let id = board[0].children[i].id;
+        if(i % 2 === 0) {
+            document.getElementById(id).style.background = c2;
+        } else {
+            document.getElementById(id).style.background = c1;
+        }
+        if(i >= 1 && (i+1) % 8 === 0) {
+            tmp = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+        despawn(id);
+    }
+    localStorage.clear();
+}
+
+
+    //Removing pieces from where they were before they moved.
+    const despawn = (spot) => {
+        document.getElementById(spot).innerHTML = '';
+        document.getElementById(spot).setAttribute('class', 'none');
+        document.getElementById(spot).setAttribute('possible', 'false');
+    }
+
+
 
 /////////////////////////////////////////////////////////////////////
 //Start restructuring.  You can have one universal movement function dependent upon different guide functions.
@@ -45,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var c1 = 'rgb(242,242,242)';
     var c2 = 'lightblue';
     var tmp = '';
-    var board = document.getElementsByClassName("board");
     //For each of the children on the board, iterate through white and the other color.  When the end of the board is reached, switch.
     function color() {
         for(var i = 0; i < board[0].children.length; i++) {
@@ -64,27 +96,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     color();
 
-    //make the clearing function mostly only apply to the middle parts!  It's making the regular bits not clickable!
-
-    function clear() {
-        var c1 = 'rgb(242,242,242)';
-        var c2 = 'lightblue';
-        for(var i = 0; i < board[0].children.length; i++) {
-            let id = board[0].children[i].id;
-            if(i % 2 === 0) {
-                document.getElementById(id).style.background = c2;
-            } else {
-                document.getElementById(id).style.background = c1;
-            }
-            if(i >= 1 && (i+1) % 8 === 0) {
-                tmp = c1;
-                c1 = c2;
-                c2 = tmp;
-            }
-            despawn(id);
-        }
-        localStorage.clear();
-    }
 
     //Placing the pieces on the board.  Place them by name, spot coordinates, and image name.
     function placement(name, spot) {
@@ -92,6 +103,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.src = './assets/' + name.substring(0, 7) + '.png';
         document.getElementById(this.spot).innerHTML = '<img src="'+src+'"/>';
         document.getElementById(this.spot).setAttribute('class', name);
+
+        //This will be where the actual socket updates happen.  The call will be here, the response will come
+        //through as an event listener I guess?  That would also call this.
         //resetPossibles();
     }
 
@@ -99,14 +113,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         for(let space of spaces) {
             document.getElementById(space.id).setAttribute("possible","false");
         }
-    }
-
-    //Removing pieces from where they were before they moved.
-    function despawn(spot) {
-        this.spot = spot;
-        document.getElementById(this.spot).innerHTML = '';
-        document.getElementById(this.spot).setAttribute('class', 'none');
-        document.getElementById(this.spot).setAttribute('possible', 'false');
     }
 
     //Capturing enemy pieces.  Setting up a JSON array to contain the captured pieces so that if a pawn wants to become a different piece it can.
@@ -156,11 +162,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == "Black") {
-            this.piecename = 'bbish';
-        } else {
-            this.piecename = "wbish";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
@@ -219,11 +220,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == "Black") {
-            this.piecename = 'bking';
-        } else {
-            this.piecename = "wking";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
@@ -264,11 +260,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == "Black") {
-            this.piecename = 'bkngt';
-        } else {
-            this.piecename = "wkngt";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
@@ -310,11 +301,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == "Black") {
-            this.piecename = 'bpawn';
-        } else {
-            this.piecename = "wpawn";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
@@ -339,7 +325,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     };
 
     Pawn.prototype.guide = function(coords, name) {
-        this.coords = coords.split("");
         /*
         Refactored movement.  No longer looks at literally every space on the board.
         */
@@ -365,6 +350,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             if(document.getElementById(front).className == "none") {
                 document.getElementById(nCoords.join('')).setAttribute("possible", "true");
                 document.getElementById(nCoords.join('')).style.background = "orange";
+            
+                if(atStart) {
+                    nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
+                    document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                    document.getElementById(nCoords.join('')).style.background = "orange";
+                }
             }
 
             if(nCoords[1] < 8) {
@@ -384,12 +375,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }
                 nCoords[1] = "" + (parseInt(nCoords[1]) + 1);
             }
-            
-            if(atStart) {
-                nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
-                document.getElementById(nCoords.join('')).setAttribute("possible", "true");
-                document.getElementById(nCoords.join('')).style.background = "orange";
-            }
         }
 
         
@@ -400,11 +385,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.spot = spot;
         this.fullname = name;
         
-        if(this.color == "Black") {
-            this.piecename = 'bquen';
-        } else {
-            this.piecename = "wquen";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
@@ -457,16 +437,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.color = color;
         this.spot = spot;
         this.fullname = name;
-        if(this.color == "Black") {
-            this.piecename = 'brook';
-        } else {
-            this.piecename = "wrook";
-        }
         document.getElementById(spot).className = this.fullname;
         placement(this.fullname, this.spot);
     }
 
-    Rook.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    Rook.prototype.move = function(coords, newspot, captured, fullname, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
@@ -484,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     };
     
-    Rook.prototype.guide = function(coords, name) {
+    Rook.prototype.guide = function(coords) {
         this.coords = coords.split("");
         console.log(coords)
 
@@ -592,9 +567,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         clear();
         start();
     });
-
-    
-    board = document.getElementsByClassName("board");
 
     for (let space of spaces) {
         //This is for the highlighting function.
