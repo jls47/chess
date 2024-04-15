@@ -17,6 +17,10 @@ var matMath = function(pawn,first, last) {
     return move;
 };
 
+const opps = {
+    'W': 'B',
+    'B': 'W'
+}
 
 
 /////////////////////////////////////////////////////////////////////
@@ -147,8 +151,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         }
     }
-
-    //TO DO: MAKE PIECES UNABLE TO JUMP
         
     function Bishop(spot, color, name) {
         this.color = color;
@@ -339,38 +341,54 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Pawn.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
         /*
-        Eventually I am going to come back to this mess and completely redo it.  Jesus christ.
+        Refactored movement.  No longer looks at literally every space on the board.
         */
-        for(let space of spaces) {
-            let newspot = space.id.split("");
-            var amove = matMath(false, this.coords, newspot);
-            var move = matMath(true, this.coords, newspot);
-            if(name.includes('B')) {
-                if((move[0] == -1 && move[1] === 0) && space.className.includes("none")) {
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
-                } else if(((move[0] == -2 && move[1] === 0) && coords[0] == 2) && space.className == "none") {
-                    if(document.getElementById([(parseInt(newspot[0]) - 1)+ newspot[1]]).className == "none") {
-                        document.getElementById(space.id).setAttribute("possible","true");
-                        document.getElementById(space.id).style.background = "orange";
-                    }
-                } else if((move[0] == -1 && amove[1] == 1) && space.className.includes('W')) {
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+
+        nCoords = coords.split("");
+
+        let dir = {
+            'B': 1,
+            'W': -1
+        }
+
+        let start = {
+            'B': 2,
+            'W': 7
+        }
+
+        let atStart = (parseInt(nCoords[0]) == start[name.substring(2,3)]);
+        
+        if(parseInt(nCoords[0]) % 8 != 0) {
+            nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
+            let front = nCoords.join('');
+
+            if(document.getElementById(front).className == "none") {
+                document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                document.getElementById(nCoords.join('')).style.background = "orange";
+            }
+
+            if(nCoords[1] < 8) {
+                nCoords[1] = "" + (parseInt(nCoords[1]) + 1);
+                if(document.getElementById(nCoords.join('')).className.includes(opps[name.substring(2,3)])) {
+                    document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                    document.getElementById(nCoords.join('')).style.background="orange";
                 }
-            } else if(name.includes('W')) {
-                if((move[0] == 1 && move[1] === 0) && space.className.includes("none")) {
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
-                } else if(((move[0] == 2 && move[1] === 0) && coords[0] == 7) && space.className == "none") {
-                    if(document.getElementById([(parseInt(newspot[0]) + 1)+ newspot[1]]).className == "none") {
-                        document.getElementById(space.id).setAttribute("possible","true");
-                        document.getElementById(space.id).style.background = "orange";
-                    }
-                } else if((move[0] == 1 && amove[1] == 1) && space.className.includes('B')) {
-                    document.getElementById(space.id).setAttribute("possible","true");
-                    document.getElementById(space.id).style.background = "orange";
+                nCoords[1] = "" + (parseInt(nCoords[1]) - 1);
+            }
+
+            if(nCoords[1] > 1) {
+                nCoords[1] = "" + (parseInt(nCoords[1]) - 1);
+                if(document.getElementById(nCoords.join('')).className.includes(opps[name.substring(2,3)])) {
+                    document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                    document.getElementById(nCoords.join('')).style.background="orange";
                 }
+                nCoords[1] = "" + (parseInt(nCoords[1]) + 1);
+            }
+            
+            if(atStart) {
+                nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
+                document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                document.getElementById(nCoords.join('')).style.background = "orange";
             }
         }
 
@@ -465,9 +483,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             resetPossibles();
         }
     };
-    //guides need to radiate outwards from the piece
-
-    //FINISH GUIDE TO ROOK AND QUEENS
+    
     Rook.prototype.guide = function(coords, name) {
         this.coords = coords.split("");
         console.log(coords)

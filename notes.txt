@@ -1,0 +1,12 @@
+-Importing a full board state every time something happens is a bit much
+-Maybe import only when initially loading?  Eventually.
+-For now, focus on interpreting movement
+-Send string based instructions 
+-What do I need to connect?
+>functions: capture, despawn, placement
+>Add new function: save, load
+
+-How will the board be stored?
+>Not the board needing to be stored-the pieces both active and captured
+>Change all to two char names - create dict that will be used to house different pieces' constructors
+>
