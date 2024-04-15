@@ -166,12 +166,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         placement(this.fullname, this.spot);
     }
 
-    Bishop.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    Bishop.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if(document.getElementById(newspot).getAttribute("possible") == "true") {
             if(captured == 'true') {
-                capture(newspot, fullname, imagetext);
+                capture(newspot, this.fullname, imagetext);
             }
             placement(this.fullname, newspot, this.color);
             despawn(coords);
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         placement(this.fullname, this.spot);
     }
 
-    King.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    King.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
+            capture(newspot, this.fullname, imagetext);
             placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         placement(this.fullname, this.spot);
     }
 
-    Knight.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    Knight.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
+            capture(newspot, this.fullname, imagetext);
             placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
@@ -306,13 +306,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
 
-    Pawn.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    Pawn.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
 
         if(document.getElementById(newspot).getAttribute("possible") == "true") {
             if(captured == 'true') {
-                capture(newspot, fullname, imagetext);
+                capture(newspot, this.fullname, imagetext);
             }
             placement(this.fullname, newspot, this.color);
             despawn(coords);
@@ -389,12 +389,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         placement(this.fullname, this.spot);
     }
     
-    Queen.prototype.move = function(coords, newspot, color, captured, fullname, imagetext) {
+    Queen.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if(document.getElementById(newspot).getAttribute("possible") == "true") {
             if(captured == "true") {
-                capture(newspot, fullname, imagetext);
+                capture(newspot, this.fullname, imagetext);
             }
             placement(this.fullname, newspot, this.color);
             despawn(coords);
@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         placement(this.fullname, this.spot);
     }
 
-    Rook.prototype.move = function(coords, newspot, captured, fullname, imagetext) {
+    Rook.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
@@ -449,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             despawn(coords);
             turn += 1;
         } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
-            capture(newspot, fullname, imagetext);
+            capture(newspot, this.fullname, imagetext);
             placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
