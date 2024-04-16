@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if(document.getElementById(newspot).getAttribute("possible") == "true") {
-            if(captured == 'true') {
+            if(captured) {
                 capture(newspot, this.fullname, imagetext);
             }
             placement(this.fullname, newspot, this.color);
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //If the values do not equal either 8 or 1 and there's a break then something.  Shit.  write more.
     //Add the values that are on white spaces to their own array too?  See if they line up, then remove the one furthest from the piece with matrix math
 
-    Bishop.prototype.guide = function(coords, name) {
+    Bishop.prototype.guide = function(coords) {
         this.coords = coords.split("");
         let poss = [];
         console.log(coords)
@@ -266,12 +266,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     Knight.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
-        this.newspot = newspot.split("");
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
+        console.log(!captured);
+        console.log((document.getElementById(newspot).getAttribute("possible") == "true") && !captured);
+        console.log(document.getElementById(newspot).getAttribute("possible") == "true");
+        console.log(captured == 'false');
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && !captured) {
             placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
-        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured) {
             capture(newspot, this.fullname, imagetext);
             placement(this.fullname, newspot, this.color);
             despawn(coords);
@@ -347,16 +350,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
             nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
             let front = nCoords.join('');
 
-            if(document.getElementById(front).className == "none") {
-                document.getElementById(nCoords.join('')).setAttribute("possible", "true");
-                document.getElementById(nCoords.join('')).style.background = "orange";
-            
-                if(atStart) {
-                    nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
-                    document.getElementById(nCoords.join('')).setAttribute("possible", "true");
-                    document.getElementById(nCoords.join('')).style.background = "orange";
-                }
-            }
 
             if(nCoords[1] < 8) {
                 nCoords[1] = "" + (parseInt(nCoords[1]) + 1);
@@ -374,6 +367,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     document.getElementById(nCoords.join('')).style.background="orange";
                 }
                 nCoords[1] = "" + (parseInt(nCoords[1]) + 1);
+            }
+            
+            if(document.getElementById(front).className == "none") {
+                document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                document.getElementById(nCoords.join('')).style.background = "orange";
+            
+                if(atStart) {
+                    nCoords[0] = "" + (parseInt(nCoords[0]) + dir[name.substring(2,3)]);
+                    document.getElementById(nCoords.join('')).setAttribute("possible", "true");
+                    document.getElementById(nCoords.join('')).style.background = "orange";
+                }
             }
         }
 
@@ -393,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
         if(document.getElementById(newspot).getAttribute("possible") == "true") {
-            if(captured == "true") {
+            if(captured) {
                 capture(newspot, this.fullname, imagetext);
             }
             placement(this.fullname, newspot, this.color);
@@ -444,11 +448,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Rook.prototype.move = function(coords, newspot, captured, imagetext) {
         this.coords = coords.split("");
         this.newspot = newspot.split("");
-        if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'false') {
+        if((document.getElementById(newspot).getAttribute("possible") == "true") && !captured) {
             placement(this.fullname, newspot, this.color);
             despawn(coords);
             turn += 1;
-        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured == 'true') {
+        } else if((document.getElementById(newspot).getAttribute("possible") == "true") && captured) {
             capture(newspot, this.fullname, imagetext);
             placement(this.fullname, newspot, this.color);
             despawn(coords);
@@ -486,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //A fresh start. Replacing all the pieces and clearing localstorage.
         bsBlack1 = new Bishop('13', "Black", 'bsBlack1');
         bsBlack2 = new Bishop('16', "Black", 'bsBlack2');
-        kgBlack = new King('14', "Black", 'kgBlack');
+        kgBlack = new King('15', "Black", 'kgBlack');
         knBlack1 = new Knight('12', "Black", 'knBlack1');
         knBlack2 = new Knight('17', "Black", 'knBlack2');
         pnBlack1 = new Pawn('21',"Black", 'pnBlack1');
@@ -497,13 +501,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
         pnBlack6 = new Pawn('26',"Black", 'pnBlack6');
         pnBlack7 = new Pawn('27',"Black", 'pnBlack7');
         pnBlack8 = new Pawn('28',"Black", 'pnBlack8');
-        qnBlack = new Queen('15',"Black", 'qnBlack');
+        qnBlack = new Queen('14',"Black", 'qnBlack');
         rkBlack1 = new Rook('11',"Black", 'rkBlack1');
         rkBlack2 = new Rook('18',"Black", 'rkBlack1');
         
         bsWhite1 = new Bishop('83', "White", 'bsWhite1');
         bsWhite2 = new Bishop('86', "White", 'bsWhite2');
-        kgWhite = new King('84', "White", 'kgWhite');
+        kgWhite = new King('85', "White", 'kgWhite');
         knWhite1 = new Knight('82', "White", 'knWhite1');
         knWhite2 = new Knight('87', "White", 'knWhite2');
         pnWhite1 = new Pawn('71',"White", 'pnWhite1');
@@ -514,7 +518,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         pnWhite6 = new Pawn('76',"White", 'pnWhite6');
         pnWhite7 = new Pawn('77',"White", 'pnWhite7');
         pnWhite8 = new Pawn('78',"White", 'pnWhite8');
-        qnWhite = new Queen('85',"White", 'qnWhite');
+        qnWhite = new Queen('84',"White", 'qnWhite');
         rkWhite1 = new Rook('81',"White", 'rkWhite1');
         rkWhite2 = new Rook('88',"White", 'rkWhite2');
         
